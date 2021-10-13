@@ -14,7 +14,7 @@ app.use(express.json())
 app.use('/api/users', usersRouter)
 app.use('/api/movies', moviesRouter)
 app.use('/api/members', membersRouter)
-app.use('/api/subscriptions', subscriptionsRouter)  //Continue With This
+app.use('/api/subscriptions', subscriptionsRouter)  
 
 
 
