@@ -1,12 +1,13 @@
 let usersModel = require("./usersModel");
+let jsonDAL = require("../Dals/jsonDAL");
 
 const getUsers = async () => {
   return new Promise((resolve, reject) => {
-    usersModel.find({}, async function (err, data) {
+    usersModel.find({}, (err, data) => {
       if (err) {
         reject(err);
       } 
-        
+        // let users = await jsonDAL.readJsonFile('users.json')
         resolve(data);
     });
   });
@@ -14,10 +15,19 @@ const getUsers = async () => {
 
 const getUserByID = async (userID) => {
   return new Promise((resolve, reject) => {
-    usersModel.findById(userID, (err, data) => {
+    usersModel.findById(userID, async (err, data) => {
       if (err) {
         reject(err);
       }
+        let resp = await jsonDAL.readJsonFile('users.json')
+        let user = resp.users.find(user => user._id == data._id)
+        
+        let resp2 = await jsonDAL.readJsonFile('permissions.json')
+        let userPermissions = resp2.permissions.find(permission => permission._id == permission._id)
+        console.log(userPermissions);
+        user = {...data._doc, ...user, permissions: userPermissions.permissions}
+        console.log(user);
+
       resolve(data);
     });
   });
