@@ -1,11 +1,1 @@
-{
-  "users": [
-    {
-      "_id": "615570f18ebfba018e7f2d82",
-      "first_name": "Shai",
-      "last_name": "Shmuel",
-      "created_date": "12/05/21",
-      "session_timeout": "10"
-    }
-  ]
-}
+{"users":[{"_id":"615570f18ebfba018e7f2d82","first_name":"Shai","last_name":"Shmuel","created_date":"12/05/21","session_timeout":"10"},{"_id":"61674f3a1857b3cc9130b44d","first_name":"Karin","last_name":"Shmuel","created_date":"12/04/21","session_timeout":"120"},{"_id":"6167505365cba263258e78e9","first_name":"Karin","last_name":"Shmuel","created_date":"12/04/21","session_timeout":"120"},{"_id":"6167507d89e6dbc6c50eb4fa","first_name":"Karin","last_name":"Shmuel","created_date":"12/04/21","session_timeout":"120"}]}
