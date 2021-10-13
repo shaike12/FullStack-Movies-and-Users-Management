@@ -1,0 +1,17 @@
+{
+  "permissions": [
+    {
+      "id": "615570f18ebfba018e7f2d82",
+      "permissions": [
+        "View Subscriptions",
+        "Create Subscriptions",
+        "Update Subscriptions",
+        "Delete Subscriptions",
+        "View Movies",
+        "Create Movies",
+        "Update Movies",
+        "Delete Movies"
+      ]
+    }
+  ]
+}
