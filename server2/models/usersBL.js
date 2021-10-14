@@ -133,7 +133,7 @@ const deleteUser = async (userID) => {
         permissions: allPermissions,
       });
 
-      // Returning Username Of Delted User
+      // Returning Username Of Deleted User
       resolve(data);
     });
   });
