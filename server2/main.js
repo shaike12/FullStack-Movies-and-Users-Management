@@ -1,5 +1,6 @@
 const express = require('express');
 let app = express();
+var cors = require('cors')
 const usersRouter = require('./routers/users')
 const moviesRouter = require('./routers/movies')
 const membersRouter = require('./routers/members')
@@ -8,6 +9,7 @@ const subscriptionsRouter = require('./routers/subscriptions')
 // Connection To Database
 require('./configs/database')
 
+app.use(cors())
 app.use(express.json())
 
 

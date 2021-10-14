@@ -13,7 +13,7 @@ const getAllMovies = async () => {
             return {
               name: movie.name,
               genres: movie.genres,
-              image: movie.medium,
+              image: movie.image.medium,
               premiered: movie.premiered,
             };
           });
