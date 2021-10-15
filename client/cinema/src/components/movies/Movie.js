@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from "react";
 import { Container } from "@material-ui/core";
 import { Link, useRouteMatch } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 
-const MovieComp = ({ movie, deleteMovie }) => {
+const MovieComp = ({ movie }) => {
   const { path } = useRouteMatch();
+  const dispatch = useDispatch();
+
+  const deleteMovie = async (movieID) => {
+    await axios.delete("http://localhost:4000/api/movies/" + movieID);
+    dispatch({ type: "DELETE_MOVIE", payload: movieID });
+  };
+
 
   return (
     <Container style={{ border: "1px solid black", width: "400px" }}>

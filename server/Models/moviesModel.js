@@ -4,7 +4,7 @@ const moviesSchema = new mongoose.Schema({
     name: String,
     genres: Array,
     image: String,
-    premiered: Date
+    premiered: String
 })
 
 module.exports = mongoose.model('movies', moviesSchema)

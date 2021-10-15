@@ -6,10 +6,10 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import { Provider } from 'react-redux'
 import { createStore } from "redux";
-import reducer from "./reducers/moviesReducer";
+import reducers from "./reducers/index";
 
 let store = createStore(
-  reducer /* preloadedState, */,
+  reducers /* preloadedState, */,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 

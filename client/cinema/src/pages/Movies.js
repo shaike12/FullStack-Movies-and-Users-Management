@@ -7,7 +7,7 @@ import EditMovieComp from "../components/movies/EditMovie";
 
 function MoviesComp() {
   const { path } = useRouteMatch();
-    console.log(path);
+
   return (
     <>
       <div className='App'>

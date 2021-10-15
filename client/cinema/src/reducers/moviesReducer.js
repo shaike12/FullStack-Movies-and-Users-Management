@@ -16,8 +16,9 @@ const movies = (state = [], action) => {
 
     case "ADD_MOVIE":
       let movies = state;
+      console.log(action.payload);
       movies.push(action.payload);
-      return movies;
+      return state;
 
     default:
       return state;

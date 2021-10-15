@@ -14,13 +14,7 @@ const EditMovieComp = () => {
   useEffect(() => {
     async function fetchData() {
       let resp = await axios.get("http://localhost:4000/api/movies/" + id );
-      setMovie({
-        ...resp.data, 
-        name: resp.data.name,
-        image: resp.data.image,
-        premiered: resp.data.premiered,
-        genres: resp.data.genres,
-      });
+      setMovie({...resp.data});
     }
     fetchData();
   }, []);
@@ -37,6 +31,8 @@ const EditMovieComp = () => {
 
   return (
     <div>
+            <h2>Edit Movie</h2>
+
       <form>
         Name:{" "}
         <input
