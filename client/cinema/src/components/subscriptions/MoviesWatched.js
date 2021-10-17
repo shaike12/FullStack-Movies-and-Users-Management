@@ -30,9 +30,9 @@ const MoviesWatchedComp = ({ id }) => {
       let resp = await axios.get(
         `http://localhost:4000/api/subscriptions/${id}`
       );
-      console.log(resp.data);
+
       if (resp.data.length > 0) {
-        let g = await Promise.all(
+        let data = await Promise.all(
           resp.data[0].movies.map(async (movie) => {
             let movieData = await axios.get(
               `http://localhost:4000/api/movies/${movie._id}`
@@ -45,7 +45,7 @@ const MoviesWatchedComp = ({ id }) => {
             return movie;
           })
         );
-        setWatchedMovies(g);
+        setWatchedMovies(data);
       }
     };
     fetchData();
@@ -65,7 +65,6 @@ const MoviesWatchedComp = ({ id }) => {
     } else {
       sub[0].movies.push({ _id: movieIdField, date: dateField });
       delete sub[0]._id;
-      console.log(sub);
       await axios.put(`http://localhost:4000/api/subscriptions/${id}`, sub[0]);
     }
   };
