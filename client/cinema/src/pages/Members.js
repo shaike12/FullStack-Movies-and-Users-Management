@@ -27,6 +27,7 @@ function MembersComp() {
         <Route path={path + "/editMember/:id"}>
           <EditMemberComp/>
         </Route>
+      
       </Switch>
     </div>
   );

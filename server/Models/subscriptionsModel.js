@@ -1,7 +1,7 @@
 let mongoose = require('mongoose')
 
 const subscriptionsSchema = new mongoose.Schema({
-    memberID: String,
+    memberId: String,
     movies: [{
         movie_id: String, 
         date: String 

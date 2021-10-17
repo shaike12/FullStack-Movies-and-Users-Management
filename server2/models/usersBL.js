@@ -3,12 +3,31 @@ let jsonDAL = require("../Dals/jsonDAL");
 
 const getUsers = async () => {
   return new Promise((resolve, reject) => {
-    usersModel.find({}, (err, data) => {
+    usersModel.find({}, async (err, data) => {
       if (err) {
         reject(err);
       }
-      // let users = await jsonDAL.readJsonFile('users.json')
-      resolve(data);
+      // Gethering All Users Data From All Data Sources And Shape It To Full User Data
+      let users = Promise.all(
+        data.map(async (item) => {
+          let json = await jsonDAL.readJsonFile("users.json");
+          let user = json.users.find((user) => user._id == item._id);
+
+          let json2 = await jsonDAL.readJsonFile("permissions.json");
+          let userPermissions = json2.permissions.find(
+            (permission) => permission._id == permission._id
+          );
+
+          let userData = {
+            ...user,
+            ...item._doc,
+            permissions: userPermissions.permissions,
+          };
+          return userData;
+        })
+      );
+
+      resolve(users);
     });
   });
 };
@@ -28,13 +47,12 @@ const getUserByID = async (userID) => {
         (permission) => permission._id == permission._id
       );
 
-      user = {
+      userData = {
         ...user,
         ...data._doc,
         permissions: userPermissions.permissions,
       };
-      console.log(user);
-      resolve(user);
+      resolve(userData);
     });
   });
 };

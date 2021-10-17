@@ -27,7 +27,7 @@ const MovieComp = ({ movie }) => {
         </ul>
       </div>
       <button>
-        <Link to={path + `/editMovie/${movie._id}`}>Edit</Link>
+        <Link to={path + `/edit movie/${movie._id}`}>Edit</Link>
       </button>
       <button onClick={() => deleteMovie(movie._id)}>Delete</button>
     </Container>

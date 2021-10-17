@@ -3,6 +3,7 @@ import { Container } from "@material-ui/core";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import MoviesWatchedComp from './MoviesWatched'
 
 const MemberComp = ({ member }) => {
   const { path } = useRouteMatch();
@@ -25,12 +26,7 @@ const MemberComp = ({ member }) => {
         <Link to={path + `/editMember/${member._id}`}>Edit</Link>
       </button>
       <button onClick={() => deleteMember(member._id)}>Delete</button>
-      <h2>Movies Watched</h2>
-      <div>
-        <button>Subscribe New Movie</button>
-
-        {/* need to add list of movies that member watched */}
-      </div>
+      <MoviesWatchedComp id={member._id} />
     </Container>
   );
 };

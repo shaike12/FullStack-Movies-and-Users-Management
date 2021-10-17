@@ -14,7 +14,7 @@ const getAllSubscriptions = async () => {
 
 const getSubscriptionByID = async (subscriptionID) => {
   return new Promise((resolve, reject) => {
-    subscriptionsModel.findById(subscriptionID, (err, data) => {
+    subscriptionsModel.find({memberId: subscriptionID}, (err, data) => {
       if (err) {
         reject(err);
       }
@@ -36,10 +36,11 @@ const addSubscription = async (subscriptionData) => {
   });
 };
 
-const updateSubscription = async (subscriptionID, subscriptionData) => {
+const updateSubscription = async (memberID, subscriptionData) => {
   return new Promise((resolve, reject) => {
-    subscriptionsModel.findByIdAndUpdate(
-      subscriptionID,
+
+    subscriptionsModel.updateOne(
+      {memberId: memberID},
       subscriptionData,
       (err, data) => {
         if (err) {
@@ -53,7 +54,7 @@ const updateSubscription = async (subscriptionID, subscriptionData) => {
 
 const deleteSubscription = async (subscriptionID) => {
   return new Promise((resolve, reject) => {
-    subscriptionsModel.findByIdAndDelete(subscriptionID, (err, data) => {
+    subscriptionsModel.deleteOne({memberId: subscriptionID}, (err, data) => {
       if (err) {
         reject(err);
       }
