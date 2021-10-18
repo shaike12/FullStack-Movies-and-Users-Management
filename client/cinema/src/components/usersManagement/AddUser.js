@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   TextField,
@@ -34,12 +34,14 @@ const AddUserComp = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+
+
   const addUser = async () => {
     try {
       let permis = user.permissions
         .filter((x) => x.isChecked)
         .map((x) => x.value);
-        
+
       let resp = await axios.post("http://localhost:4000/api/users", {
         ...user,
         permissions: permis,
@@ -70,17 +72,31 @@ const AddUserComp = () => {
       currentCheckBox.value === "Create Subscriptions" ||
       currentCheckBox.value === "Update Subscriptions" ||
       currentCheckBox.value === "Delete Subscriptions"
-    ) {
-      newPermissions[0].isChecked = true;
-    }
+      ) {
+        newPermissions[0].isChecked = true;
+      }
     if (
       currentCheckBox.value === "Create Movies" ||
       currentCheckBox.value === "Update Movies" ||
       currentCheckBox.value === "Delete Movies"
-    ) {
+      ) {
       newPermissions[4].isChecked = true;
     }
+    if (currentCheckBox.value === "View Subscriptions" && !currentCheckBox.isChecked){
+      console.log(newPermissions)
+      newPermissions[1].isChecked = false;
+      newPermissions[2].isChecked = false;
+      newPermissions[3].isChecked = false;
+    }
+    
+    if (currentCheckBox.value === "View Movies" && !currentCheckBox.isChecked){
+      newPermissions[5].isChecked = false;
+      newPermissions[6].isChecked = false;
+      newPermissions[7].isChecked = false;
+    }
 
+
+ 
     setUser({ ...user, permissions: [...newPermissions] });
   };
 
@@ -149,7 +165,9 @@ const AddUserComp = () => {
                   />
                 }
                 label={permission.value}
+                checked={permission.isChecked}
               />
+             
             </div>
           );
         })}

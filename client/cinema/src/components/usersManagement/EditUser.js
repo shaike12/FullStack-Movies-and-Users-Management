@@ -13,6 +13,17 @@ import { useDispatch } from "react-redux";
 
 import axios from "axios";
 
+const initilizePermissions = [
+  { value: "View Subscriptions", isChecked: false },
+  { value: "Create Subscriptions", isChecked: false },
+  { value: "Delete Subscriptions", isChecked: false },
+  { value: "Update Subscriptions", isChecked: false },
+  { value: "View Movies", isChecked: false },
+  { value: "Delete Movies", isChecked: false },
+  { value: "Update Movies", isChecked: false },
+  { value: "Create Movies", isChecked: false },
+];
+
 const EditUserComp = () => {
   const [user, setUser] = useState({
     first_name: "",
@@ -20,6 +31,7 @@ const EditUserComp = () => {
     username: "",
     session_timeout: "",
     created_date: "",
+    permissions: [],
   });
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -28,7 +40,16 @@ const EditUserComp = () => {
   useEffect(() => {
     async function fetchData() {
       let user = await axios.get("http://localhost:4000/api/users/" + id);
-      setUser({ ...user.data });
+      let permis = initilizePermissions.map(x => {
+        
+        console.log(user.data.permissions)
+        if(user.data.permissions.some(p => p === x.value)){
+          x.isChecked = true
+          return x
+        }
+        return x
+      })
+      setUser({ ...user.data, permissions: permis });
     }
     fetchData();
   }, [id]);
@@ -41,6 +62,45 @@ const EditUserComp = () => {
     } catch (err) {
       console.log("Unable to Add User", err);
     }
+  };
+
+  const handleCheckChildElement = (checkBoxId) => {
+    let newPermissions = user.permissions;
+    let currentCheckBox = user.permissions[checkBoxId];
+
+    currentCheckBox.isChecked = !currentCheckBox.isChecked;
+
+    if (
+      currentCheckBox.value === "Create Subscriptions" ||
+      currentCheckBox.value === "Update Subscriptions" ||
+      currentCheckBox.value === "Delete Subscriptions"
+    ) {
+      newPermissions[0].isChecked = true;
+    }
+    if (
+      currentCheckBox.value === "Create Movies" ||
+      currentCheckBox.value === "Update Movies" ||
+      currentCheckBox.value === "Delete Movies"
+    ) {
+      newPermissions[4].isChecked = true;
+    }
+    if (
+      currentCheckBox.value === "View Subscriptions" &&
+      !currentCheckBox.isChecked
+    ) {
+      console.log(newPermissions);
+      newPermissions[1].isChecked = false;
+      newPermissions[2].isChecked = false;
+      newPermissions[3].isChecked = false;
+    }
+
+    if (currentCheckBox.value === "View Movies" && !currentCheckBox.isChecked) {
+      newPermissions[5].isChecked = false;
+      newPermissions[6].isChecked = false;
+      newPermissions[7].isChecked = false;
+    }
+
+    setUser({ ...user, permissions: [...newPermissions] });
   };
 
   return (
@@ -105,18 +165,23 @@ const EditUserComp = () => {
           }}
           style={{ marginBottom: "20px" }}
         />
-        Permissions:
-        <FormControlLabel control={<Checkbox />} label='View Subscriptions' />
-        <FormControlLabel control={<Checkbox />} label='Create Subscriptions' />
-        <FormControlLabel
-          control={<Checkbox />}
-          label='Update  Subscriptions'
-        />
-        <FormControlLabel control={<Checkbox />} label='Delete Subscriptions' />
-        <FormControlLabel control={<Checkbox />} label='View Movies' />
-        <FormControlLabel control={<Checkbox />} label='Create Movies' />
-        <FormControlLabel control={<Checkbox />} label='Update Movies' />
-        <FormControlLabel control={<Checkbox />} label='Delete Movies' />
+        <h3>Permissions:</h3>
+        {user.permissions.map((permission, index) => {
+          return (
+            <div key={index}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name={permission.value}
+                    onChange={() => handleCheckChildElement(index)}
+                  />
+                }
+                label={permission.value}
+                checked={permission.isChecked}
+              />
+            </div>
+          );
+        })}
       </FormGroup>
       <ButtonGroup>
         <Button variant='contained' onClick={updateUser}>
