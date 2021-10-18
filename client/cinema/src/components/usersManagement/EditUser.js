@@ -1,7 +1,6 @@
 import {
   Button,
   TextField,
-  Container,
   ButtonGroup,
   Box,
   Checkbox,
@@ -15,7 +14,13 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 
 const EditUserComp = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({
+    first_name: "",
+    last_name: "",
+    username: "",
+    session_timeout: "",
+    created_date: "",
+  });
   const { id } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -47,7 +52,7 @@ const EditUserComp = () => {
         flexDirection: "column",
         ml: 3,
         width: "400px",
-        margin: "0 auto"
+        margin: "0 auto",
       }}
       noValidate
     >
@@ -60,7 +65,7 @@ const EditUserComp = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginBottom: "20px"}}
+          style={{ marginBottom: "20px" }}
           onChange={(e) => setUser({ ...user, first_name: e.target.value })}
         />
         <TextField
@@ -69,7 +74,7 @@ const EditUserComp = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginBottom: "20px"}}
+          style={{ marginBottom: "20px" }}
           onChange={(e) => setUser({ ...user, last_name: e.target.value })}
         />
         <TextField
@@ -78,7 +83,7 @@ const EditUserComp = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginBottom: "20px"}}
+          style={{ marginBottom: "20px" }}
           onChange={(e) => setUser({ ...user, username: e.target.value })}
         />
         <TextField
@@ -87,7 +92,7 @@ const EditUserComp = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginBottom: "20px"}}
+          style={{ marginBottom: "20px" }}
           onChange={(e) =>
             setUser({ ...user, session_timeout: e.target.value })
           }
@@ -98,17 +103,20 @@ const EditUserComp = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginBottom: "20px"}}
+          style={{ marginBottom: "20px" }}
         />
         Permissions:
-        <FormControlLabel control={<Checkbox />} label="View Subscriptions" />
-        <FormControlLabel control={<Checkbox />} label="Create Subscriptions" />
-        <FormControlLabel control={<Checkbox />} label="Update  Subscriptions" />
-        <FormControlLabel control={<Checkbox />} label="Delete Subscriptions" />
-        <FormControlLabel control={<Checkbox />} label="View Movies" />
-        <FormControlLabel control={<Checkbox />} label="Create Movies" />
-        <FormControlLabel control={<Checkbox />} label="Update Movies" />
-        <FormControlLabel control={<Checkbox />} label="Delete Movies" />
+        <FormControlLabel control={<Checkbox />} label='View Subscriptions' />
+        <FormControlLabel control={<Checkbox />} label='Create Subscriptions' />
+        <FormControlLabel
+          control={<Checkbox />}
+          label='Update  Subscriptions'
+        />
+        <FormControlLabel control={<Checkbox />} label='Delete Subscriptions' />
+        <FormControlLabel control={<Checkbox />} label='View Movies' />
+        <FormControlLabel control={<Checkbox />} label='Create Movies' />
+        <FormControlLabel control={<Checkbox />} label='Update Movies' />
+        <FormControlLabel control={<Checkbox />} label='Delete Movies' />
       </FormGroup>
       <ButtonGroup>
         <Button variant='contained' onClick={updateUser}>
@@ -120,7 +128,7 @@ const EditUserComp = () => {
         >
           Cancel
         </Button>
-        </ButtonGroup>
+      </ButtonGroup>
     </Box>
   );
 };

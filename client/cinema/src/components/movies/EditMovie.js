@@ -17,7 +17,7 @@ const EditMovieComp = () => {
       setMovie({...resp.data});
     }
     fetchData();
-  }, []);
+  }, [id]);
 
   const updateMovie = async () => {
     try {

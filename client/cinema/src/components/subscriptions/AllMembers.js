@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Container } from "@material-ui/core";
 import axios from "axios";
 import MemberComp from "./Member";
 import { useDispatch, useSelector } from "react-redux";
 
 const AllMembersComp = () => {
-  const [listMembers, setListMembers] = useState([]);
   const dispatch = useDispatch();
   const members = useSelector((state) => state.members);
 
@@ -13,7 +12,6 @@ const AllMembersComp = () => {
     let fetchData = async () => {
       let resp = await axios.get("http://localhost:4000/api/members");
       dispatch({ type: "ADD_ALL_MEMBERS", payload: resp.data });
-      setListMembers(resp.data);
     };
     fetchData();
   }, []);

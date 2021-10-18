@@ -27,7 +27,7 @@ function MoviesComp() {
         <Route path={path + "/add_movie"}>
           <AddMovieComp />
         </Route>
-        <Route path={path + "/edit movie/:id"}>
+        <Route path={path + "/edit_movie/:id"}>
           <EditMovieComp />
         </Route>
         <Route path={path + "/movie_page/:id"}>
