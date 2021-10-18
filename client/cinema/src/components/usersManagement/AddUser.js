@@ -12,23 +12,76 @@ import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
+const initilizePermissions = [
+  { value: "View Subscriptions", isChecked: false },
+  { value: "Create Subscriptions", isChecked: false },
+  { value: "Delete Subscriptions", isChecked: false },
+  { value: "Update Subscriptions", isChecked: false },
+  { value: "View Movies", isChecked: false },
+  { value: "Delete Movies", isChecked: false },
+  { value: "Update Movies", isChecked: false },
+  { value: "Create Movies", isChecked: false },
+];
+
 const AddUserComp = () => {
   const [user, setUser] = useState({
-    name: "",
-    email: "",
-    city: "",
+    first_name: "",
+    last_name: "",
+    username: "",
+    session_timeout: "",
+    permissions: initilizePermissions,
   });
   const dispatch = useDispatch();
   const history = useHistory();
 
   const addUser = async () => {
     try {
-      let resp = await axios.post("http://localhost:4000/api/users", user);
-      dispatch({ type: "ADD_user", payload: { id: resp._id, ...user } });
+      let permis = user.permissions
+        .filter((x) => x.isChecked)
+        .map((x) => x.value);
+        
+      let resp = await axios.post("http://localhost:4000/api/users", {
+        ...user,
+        permissions: permis,
+      });
+      dispatch({
+        type: "ADD_USER",
+        payload: {
+          id: resp._id,
+          ...user,
+          permissions: permis,
+          created_date: new Date().toISOString().substring(0, 10),
+        },
+      });
       history.push("/main/users_management");
     } catch (err) {
       console.log("Unable to Add User", err);
     }
+  };
+
+  // Handle All Checkboxs
+  const handleCheckChildElement = (checkBoxId) => {
+    let newPermissions = user.permissions;
+    let currentCheckBox = user.permissions[checkBoxId];
+
+    currentCheckBox.isChecked = !currentCheckBox.isChecked;
+
+    if (
+      currentCheckBox.value === "Create Subscriptions" ||
+      currentCheckBox.value === "Update Subscriptions" ||
+      currentCheckBox.value === "Delete Subscriptions"
+    ) {
+      newPermissions[0].isChecked = true;
+    }
+    if (
+      currentCheckBox.value === "Create Movies" ||
+      currentCheckBox.value === "Update Movies" ||
+      currentCheckBox.value === "Delete Movies"
+    ) {
+      newPermissions[4].isChecked = true;
+    }
+
+    setUser({ ...user, permissions: [...newPermissions] });
   };
 
   return (
@@ -40,7 +93,6 @@ const AddUserComp = () => {
         flexDirection: "column",
         ml: 3,
         width: "400px",
-        margin: "0 auto"
       }}
       noValidate
     >
@@ -85,35 +137,34 @@ const AddUserComp = () => {
             setUser({ ...user, session_timeout: e.target.value })
           }
         />
-        <TextField
-          label='Created Date:'
-          value={user.created_date}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{ marginBottom: "20px" }}
-        />
-        Permissions:
-        <FormControlLabel control={<Checkbox />} label='View Subscriptions' />
-        <FormControlLabel control={<Checkbox />} label='Create Subscriptions' />
-        <FormControlLabel control={<Checkbox />} label='Update Subscriptions' />
-        <FormControlLabel control={<Checkbox />} label='Delete Subscriptions' />
-        <FormControlLabel control={<Checkbox />} label='View Movies' />
-        <FormControlLabel control={<Checkbox />} label='Create Movies' />
-        <FormControlLabel control={<Checkbox />} label='Update Movies' />
-        <FormControlLabel control={<Checkbox />} label='Delete Movies' />
-          </FormGroup>
-        <ButtonGroup>
-          <Button variant='contained' onClick={addUser}>
-            Add
-          </Button>
-          <Button
-            variant='contained'
-            onClick={() => history.push("/main/users_management")}
-          >
-            Cancel
-          </Button>
-        </ButtonGroup>
+        <h3>Permissions:</h3>
+        {user.permissions.map((permission, index) => {
+          return (
+            <div key={index}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name={permission.value}
+                    onChange={() => handleCheckChildElement(index)}
+                  />
+                }
+                label={permission.value}
+              />
+            </div>
+          );
+        })}
+      </FormGroup>
+      <ButtonGroup>
+        <Button variant='contained' onClick={addUser}>
+          Add
+        </Button>
+        <Button
+          variant='contained'
+          onClick={() => history.push("/main/users_management")}
+        >
+          Cancel
+        </Button>
+      </ButtonGroup>
     </Box>
   );
 };

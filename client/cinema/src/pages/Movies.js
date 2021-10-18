@@ -4,7 +4,7 @@ import AddMovieComp from "../components/movies/AddMovie";
 import AllMoviesComp from "../components/movies/AllMovies";
 import { Button } from "@material-ui/core";
 import EditMovieComp from "../components/movies/EditMovie";
-import MoviePageComp from "../components/movies/MoviePage";
+import MoviePageComp from "./MoviePage";
 
 function MoviesComp() {
   const { path } = useRouteMatch();

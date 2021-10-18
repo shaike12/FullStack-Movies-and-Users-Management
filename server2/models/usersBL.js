@@ -15,9 +15,9 @@ const getUsers = async () => {
 
           let json2 = await jsonDAL.readJsonFile("permissions.json");
           let userPermissions = json2.permissions.find(
-            (permission) => permission._id == permission._id
+            (permission) => item._id == permission._id
           );
-
+            console.log(json2)
           let userData = {
             ...user,
             ...item._doc,

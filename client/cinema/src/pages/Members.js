@@ -4,7 +4,7 @@ import { Button } from "@material-ui/core";
 import AllMembersComp from "../components/subscriptions/AllMembers";
 import EditMemberComp from "../components/subscriptions/EditMember";
 import AddMemberComp from "../components/subscriptions/AddMember";
-import MemberPageComp from "../components/subscriptions/MemberPage";
+import MemberPageComp from "../pages/MemberPage";
 
 function MembersComp() {
   const { path } = useRouteMatch();
