@@ -54,6 +54,7 @@ const updateSubscription = async (memberID, subscriptionData) => {
 
 const deleteSubscription = async (subscriptionID) => {
   return new Promise((resolve, reject) => {
+    console.log(subscriptionID);
     subscriptionsModel.deleteOne({memberId: subscriptionID}, (err, data) => {
       if (err) {
         reject(err);

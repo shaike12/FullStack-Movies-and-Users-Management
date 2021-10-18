@@ -76,7 +76,7 @@ const addUser = async (userData) => {
         _id: data._id.toString(),
         first_name: userData.first_name,
         last_name: userData.last_name,
-        created_date: "12/04/21",
+        created_date: new Date().toISOString().substring(0, 10),
         session_timeout: userData.session_timeout,
       });
       await jsonDAL.writeJsonFile("users.json", allUsers);

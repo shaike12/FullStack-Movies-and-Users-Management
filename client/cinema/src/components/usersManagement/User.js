@@ -7,7 +7,12 @@ const UserComp = ({ user }) => {
   const { path } = useRouteMatch();
   const dispatch = useDispatch();
 
+
   const deleteUser = async (userID) => {
+    // Disable Delete Admin
+    if (user.username === 'admin'){
+      return null
+    }
     await axios.delete("http://localhost:4000/api/users/" + userID);
     dispatch({ type: "DELETE_USER", payload: userID });
   };

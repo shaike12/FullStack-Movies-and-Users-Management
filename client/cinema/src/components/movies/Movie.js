@@ -17,40 +17,30 @@ const MovieComp = ({ movie }) => {
   useEffect(() => {
     const fetchData = async () => {
       let resp = await axios.get("http://localhost:4000/api/subscriptions/");
-      let subs = resp.data;
+      let allsubscriptions = resp.data;
 
-      let subsWatched = subs.filter((sub) => {
-        let i = sub.movies.find((item) => item._id === movie._id);
-        if (i) {
-          return true;
-        }
+      // Find Members That are Watched This Movie
+      let membersWatched = allsubscriptions.filter((sub) =>
+        sub.movies.some((m) => m._id === movie._id)
+      );
 
-        return false;
-      });
-
-      subsWatched = await Promise.all(
-        subsWatched.map(async (x) => {
+      // 
+      membersWatched = await Promise.all(
+        membersWatched.map(async (x) => {
+          console.log(membersWatched)
           let i = x.movies.findIndex((item) => item._id === movie._id);
           let memberName = await axios.get(
             "http://localhost:4000/api/members/" + x.memberId
           );
-          if (memberName.data){
             return {
               memberId: x.memberId,
-              name: memberName.data.name,
+              name: memberName.data ? memberName.data.name : "Name Not Exists",
               date: x.movies[i].date,
             };
-          }
-          else {
-            return {
-              memberId: "Member Not Exists",
-              name: "Member Not Exists",
-              date: x.movies[i].date,
-            }; 
-          }
+          
         })
       );
-      setMembersWatched(subsWatched);
+      setMembersWatched(membersWatched);
     };
 
     fetchData();
@@ -76,11 +66,14 @@ const MovieComp = ({ movie }) => {
           ))}
         </ul>
       </div>
-      <br/>
-      <Button variant="outlined">
-        <Link to={path + `/edit movie/${movie._id}`}>Edit</Link>
+      <br />
+      <Button variant='outlined'>
+        <Link to={path + `/edit_movie/${movie._id}`}>Edit</Link>
       </Button>
-      <Button variant="outlined" onClick={() => deleteMovie(movie._id)}>Delete</Button><br/>
+      <Button variant='outlined' onClick={() => deleteMovie(movie._id)}>
+        Delete
+      </Button>
+      <br />
     </Container>
   );
 };

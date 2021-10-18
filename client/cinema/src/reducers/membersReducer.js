@@ -7,6 +7,7 @@ const members = (state = [], action) => {
       return state.filter((member) => member._id !== action.payload);
 
     case "UPDATE_MEMBER":
+      console.log(action.payload)
       return state.map((member) => {
         if (member._id === action.payload.member.id) {
           return action.payload.member;

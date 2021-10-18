@@ -38,26 +38,31 @@ const EditUserComp = () => {
   const history = useHistory();
 
   useEffect(() => {
+    // Add 'isChecked' Key To User Data
     async function fetchData() {
       let user = await axios.get("http://localhost:4000/api/users/" + id);
-      let permis = initilizePermissions.map(x => {
-        
-        console.log(user.data.permissions)
-        if(user.data.permissions.some(p => p === x.value)){
-          x.isChecked = true
-          return x
+      let permis = initilizePermissions.map((x) => {
+        if (user.data.permissions.some((p) => p === x.value)) {
+          x.isChecked = true;
+          return x;
         }
-        return x
-      })
+        return x;
+      });
       setUser({ ...user.data, permissions: permis });
     }
     fetchData();
   }, [id]);
 
   const updateUser = async () => {
+    // Clean Up 'isChecked' Key (Boolian) From User Data
+    let obj = user;
+    obj.permissions = obj.permissions
+      .filter((p) => p.isChecked)
+      .map((p) => p.value);
+
     try {
-      await axios.put("http://localhost:4000/api/users/" + id, user);
-      dispatch({ type: "UPDATE_USER", payload: user });
+      await axios.put("http://localhost:4000/api/users/" + id, obj);
+      dispatch({ type: "UPDATE_USER", payload: obj });
       history.push("/main/users_management");
     } catch (err) {
       console.log("Unable to Add User", err);

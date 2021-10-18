@@ -17,15 +17,16 @@ const EditMemberComp = () => {
       setMember({...member.data});
     }
     fetchData();
-  }, [id]);
+  }, []);
 
   const updateMember = async () => {
+    console.log(member);
     try {
       await axios.put("http://localhost:4000/api/members/" + id, member );
-      dispatch({ type: "UPDATE_MEMBER", payload: member });
+      dispatch({ type: "UPDATE_MEMBER", payload: {id, member} });
       history.push("/main/subscriptions");
     } catch (err) {
-      console.log("Unable to Add member", err);
+      console.log("Unable to Add Member", err);
     }
   };
 

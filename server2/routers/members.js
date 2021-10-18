@@ -1,4 +1,5 @@
 const membersBL = require('../models/membersBL')
+const subscriptionsBL = require('../models/subscriptionsBL')
 const express = require('express')
 const router = express.Router()
 
@@ -29,6 +30,9 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     let member = await membersBL.deleteMember(req.params.id)
+    console.log(req.params.id);
+    await subscriptionsBL.deleteSubscription(req.params.id)
+    
     
     res.json(member)
 })
