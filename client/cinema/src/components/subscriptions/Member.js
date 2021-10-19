@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "@material-ui/core";
+import { Card, Button, Divider, ListItem } from "@mui/material";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import MoviesWatchedComp from "./AddWatchedMovie";
+import AddWatchedMovieComp from "./AddWatchedMovie";
 
 const MemberComp = ({ member }) => {
   const { path } = useRouteMatch();
@@ -65,26 +65,34 @@ const MemberComp = ({ member }) => {
   }, [isShow, member._id]);
 
   return (
-    <Container style={{ border: "1px solid black", width: "400px" }}>
+    <Card style={{ border: "1px solid black", width: "400px" }}>
       <div>
-        <h3>{member.name}</h3>
+        <h2>{member.name}</h2>
         <div>Email: {member.email} </div>
-        <br />
         <div>City: {member.city} </div>
         <br />
-
-        <button>
-          <Link to={path + `/edit_member/${member._id}`}>Edit</Link>
-        </button>
-        <button onClick={() => deleteMember(member._id)}>Delete</button>
-        <br />
-        <br />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            marginBottom: "20px",
+          }}
+        >
+          <Button variant='outlined'>
+            <Link to={path + `/edit_member/${member._id}`}>Edit</Link>
+          </Button>
+          <Button variant='outlined' onClick={() => deleteMember(member._id)}>
+            Delete
+          </Button>
+        </div>
       </div>
 
-      <button onClick={() => setIsShow(!isShow)}>Subscribe New Movie</button>
+      <Button variant='contained' onClick={() => setIsShow(!isShow)}>
+        Subscribe New Movie
+      </Button>
       {/* Show Add New Watched Movie  */}
       {isShow && (
-        <MoviesWatchedComp
+        <AddWatchedMovieComp
           id={member._id}
           addNewMovie={addNewMovie}
           watchedMovies={watchedMovies}
@@ -92,18 +100,22 @@ const MemberComp = ({ member }) => {
       )}
 
       {/* Show All Watched Movies */}
-      <h2>Movies Watched</h2>
+      <h3>Movies Watched</h3>
       <ul>
         {watchedMovies.map((movie) => (
-          <li key={movie._id}>
-            <a href={"/main/movies/movie_page/" + movie._id}>
-              {movie.name ? movie.name : "Not Found"}
-            </a>
-            ,{movie.date}
-          </li>
+          <ListItem disablePadding key={movie._id}>
+            <ListItem>
+              <a href={"/main/movies/movie_page/" + movie._id}>
+                {movie.name ? movie.name : "Not Found"}
+              </a>
+            </ListItem>
+
+            <ListItem>{movie.date}</ListItem>
+            <Divider />
+          </ListItem>
         ))}
       </ul>
-    </Container>
+    </Card>
   );
 };
 

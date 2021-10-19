@@ -1,16 +1,1 @@
-{
-  "users": [
-    {
-      "_id": "615570f18ebfba018e7f2d82",
-      "first_name": "Shai",
-      "last_name": "Shmuel"
-    },
-    {
-      "_id": "616dc7ed284f374d45476eeb",
-      "first_name": "",
-      "last_name": "",
-      "created_date": "2021-10-18",
-      "session_timeout": ""
-    }
-  ]
-}
+{"users":[{"_id":"615570f18ebfba018e7f2d82","first_name":"Shai","last_name":"Shmuel"}]}

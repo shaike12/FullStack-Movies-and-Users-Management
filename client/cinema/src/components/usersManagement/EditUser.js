@@ -6,7 +6,7 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
-} from "@material-ui/core";
+} from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -61,6 +61,7 @@ const EditUserComp = () => {
       .map((p) => p.value);
 
     try {
+      console.log(obj);
       await axios.put("http://localhost:4000/api/users/" + id, obj);
       dispatch({ type: "UPDATE_USER", payload: obj });
       history.push("/main/users_management");
@@ -111,26 +112,24 @@ const EditUserComp = () => {
   return (
     <Box
       component='form'
-      sx={{
-        "& .MuiTextField-root": { m: 12, width: "30ch" },
-        display: "flex",
-        flexDirection: "column",
-        ml: 3,
-        width: "400px",
-        margin: "0 auto",
-      }}
-      noValidate
+        sx={{
+          "& .MuiTextField-root": { m: 2},
+        
+        }}
+        noValidate
+        autoComplete='off'
+        style={{textAlign: 'center',maxWidth:"600px", margin:"0 auto"}}
     >
       <FormGroup>
         <h2>Edit User</h2>
         <TextField
-          variant='standard'
           label='First Name:'
           value={user.first_name}
           InputLabelProps={{
             shrink: true,
           }}
           style={{ marginBottom: "20px" }}
+          fullWidth
           onChange={(e) => setUser({ ...user, first_name: e.target.value })}
         />
         <TextField
@@ -140,6 +139,7 @@ const EditUserComp = () => {
             shrink: true,
           }}
           style={{ marginBottom: "20px" }}
+          fullWidth
           onChange={(e) => setUser({ ...user, last_name: e.target.value })}
         />
         <TextField
@@ -149,6 +149,7 @@ const EditUserComp = () => {
             shrink: true,
           }}
           style={{ marginBottom: "20px" }}
+          fullWidth
           onChange={(e) => setUser({ ...user, username: e.target.value })}
         />
         <TextField
@@ -158,9 +159,11 @@ const EditUserComp = () => {
             shrink: true,
           }}
           style={{ marginBottom: "20px" }}
+          fullWidth
           onChange={(e) =>
             setUser({ ...user, session_timeout: e.target.value })
           }
+
         />
         <TextField
           label='Created Date:'
@@ -169,6 +172,8 @@ const EditUserComp = () => {
             shrink: true,
           }}
           style={{ marginBottom: "20px" }}
+          fullWidth
+          disabled
         />
         <h3>Permissions:</h3>
         {user.permissions.map((permission, index) => {
@@ -188,9 +193,17 @@ const EditUserComp = () => {
           );
         })}
       </FormGroup>
-      <ButtonGroup>
+      
+        <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          marginBottom: "20px",
+          marginTop: "20px",
+        }}
+      >
         <Button variant='contained' onClick={updateUser}>
-          Update
+          Add
         </Button>
         <Button
           variant='contained'
@@ -198,7 +211,7 @@ const EditUserComp = () => {
         >
           Cancel
         </Button>
-      </ButtonGroup>
+      </div>
     </Box>
   );
 };

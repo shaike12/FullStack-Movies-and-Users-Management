@@ -17,7 +17,7 @@ const getUsers = async () => {
           let userPermissions = json2.permissions.find(
             (permission) => item._id == permission._id
           );
-            console.log(json2)
+          console.log(json2);
           let userData = {
             ...user,
             ...item._doc,
@@ -47,6 +47,7 @@ const getUserByID = async (userID) => {
         (permission) => userID == permission._id
       );
 
+      // Rebuild Full User Data Object
       userData = {
         ...user,
         ...data._doc,
@@ -103,14 +104,13 @@ const updateUser = async (userID, userData) => {
       }
 
       // Update User Info in Users.json File
-
       let allUsers = await jsonDAL.readJsonFile("users.json");
       let index = allUsers.users.findIndex((user) => user._id == userID);
       allUsers.users[index] = {
         _id: userID,
         first_name: userData.first_name,
         last_name: userData.last_name,
-        created_data: userData.created_date,
+        created_date: userData.created_date,
         session_timeout: userData.session_timeout,
       };
       await jsonDAL.writeJsonFile("users.json", allUsers);
@@ -139,6 +139,7 @@ const deleteUser = async (userID) => {
         reject(err);
       }
 
+      // Delete User From all Data Sources
       let allUsers = await jsonDAL.readJsonFile("users.json");
       allUsers = allUsers.users.filter((user) => user._id !== userID);
       await jsonDAL.writeJsonFile("users.json", { users: allUsers });

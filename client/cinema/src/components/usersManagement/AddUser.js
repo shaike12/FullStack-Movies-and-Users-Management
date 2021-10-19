@@ -7,7 +7,7 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
-} from "@material-ui/core";
+} from "@mui/material";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -33,8 +33,6 @@ const AddUserComp = () => {
   });
   const dispatch = useDispatch();
   const history = useHistory();
-
-
 
   const addUser = async () => {
     try {
@@ -72,31 +70,32 @@ const AddUserComp = () => {
       currentCheckBox.value === "Create Subscriptions" ||
       currentCheckBox.value === "Update Subscriptions" ||
       currentCheckBox.value === "Delete Subscriptions"
-      ) {
-        newPermissions[0].isChecked = true;
-      }
+    ) {
+      newPermissions[0].isChecked = true;
+    }
     if (
       currentCheckBox.value === "Create Movies" ||
       currentCheckBox.value === "Update Movies" ||
       currentCheckBox.value === "Delete Movies"
-      ) {
+    ) {
       newPermissions[4].isChecked = true;
     }
-    if (currentCheckBox.value === "View Subscriptions" && !currentCheckBox.isChecked){
-      console.log(newPermissions)
+    if (
+      currentCheckBox.value === "View Subscriptions" &&
+      !currentCheckBox.isChecked
+    ) {
+      console.log(newPermissions);
       newPermissions[1].isChecked = false;
       newPermissions[2].isChecked = false;
       newPermissions[3].isChecked = false;
     }
-    
-    if (currentCheckBox.value === "View Movies" && !currentCheckBox.isChecked){
+
+    if (currentCheckBox.value === "View Movies" && !currentCheckBox.isChecked) {
       newPermissions[5].isChecked = false;
       newPermissions[6].isChecked = false;
       newPermissions[7].isChecked = false;
     }
 
-
- 
     setUser({ ...user, permissions: [...newPermissions] });
   };
 
@@ -104,20 +103,19 @@ const AddUserComp = () => {
     <Box
       component='form'
       sx={{
-        "& .MuiTextField-root": { m: 12, width: "30ch" },
-        display: "flex",
-        flexDirection: "column",
-        ml: 3,
-        width: "400px",
+        "& .MuiTextField-root": { m: 1 },
       }}
       noValidate
+      autoComplete='off'
+      style={{ textAlign: "center", maxWidth: "600px", margin:"0 auto" }}
     >
       <FormGroup>
         <h2>Add User</h2>
         <TextField
-          variant='standard'
           label='First Name:'
           value={user.first_name}
+          required
+          fullWidth
           InputLabelProps={{
             shrink: true,
           }}
@@ -127,6 +125,8 @@ const AddUserComp = () => {
         <TextField
           label='Last Name:'
           value={user.last_name}
+          required
+          fullWidth
           InputLabelProps={{
             shrink: true,
           }}
@@ -136,6 +136,8 @@ const AddUserComp = () => {
         <TextField
           label='Username:'
           value={user.username}
+          required
+          fullWidth
           InputLabelProps={{
             shrink: true,
           }}
@@ -145,6 +147,8 @@ const AddUserComp = () => {
         <TextField
           label='Session Timeout:'
           value={user.session_timeout}
+          required
+          fullWidth
           InputLabelProps={{
             shrink: true,
           }}
@@ -167,12 +171,18 @@ const AddUserComp = () => {
                 label={permission.value}
                 checked={permission.isChecked}
               />
-             
             </div>
           );
         })}
       </FormGroup>
-      <ButtonGroup>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          marginBottom: "20px",
+          marginTop: "20px",
+        }}
+      >
         <Button variant='contained' onClick={addUser}>
           Add
         </Button>
@@ -182,7 +192,7 @@ const AddUserComp = () => {
         >
           Cancel
         </Button>
-      </ButtonGroup>
+      </div>
     </Box>
   );
 };

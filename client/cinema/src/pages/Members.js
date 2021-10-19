@@ -1,6 +1,6 @@
 import "../App.css";
 import { Link, useRouteMatch, Route, Switch } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import { Button, Stack } from "@mui/material";
 import AllMembersComp from "../components/subscriptions/AllMembers";
 import EditMemberComp from "../components/subscriptions/EditMember";
 import AddMemberComp from "../components/subscriptions/AddMember";
@@ -11,13 +11,21 @@ function MembersComp() {
 
   return (
     <div className='App'>
-      <Button variant='contained'>
-        <Link to={path}>All Members</Link>
-      </Button>
+      <Stack
+        style={{ justifyContent: "center", margin: "20px 40px" }}
+        direction={{ xs: "column", sm: "row" }}
+        spacing={2}
+      >
+        <Button variant='outlined'>
+          <Link to={path}>All Members</Link>
+        </Button>
+        <Button variant='outlined'>
+          <Link to={path + "/add_member"}>Add Member</Link>
+        </Button>
+      </Stack>
+  
 
-      <Button variant='contained'>
-        <Link to={path + "/add_member"}>Add Member</Link>
-      </Button>
+    
       <Switch>
         <Route exact path={path}>
           <AllMembersComp />

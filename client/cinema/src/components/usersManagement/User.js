@@ -1,4 +1,4 @@
-import { Container, Button } from "@material-ui/core";
+import { Container, Button } from "@mui/material";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -25,12 +25,19 @@ const UserComp = ({ user }) => {
       <div>Created Date : {user.created_date}</div>
       <div>Permissions : {user.permissions.join(', ')}</div>
    
-
-      <Button variant="contained">
-        <Link to={path + `/edit_user/${user._id}`}>Edit</Link>
+      <br/>
+<div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            marginBottom: "20px",
+          }}
+        >
+      <Button  variant="contained">
+        <Link className="edit" to={path + `/edit_user/${user._id}`}>Edit</Link>
       </Button>
-      <Button variant="contained" onClick={() => deleteUser(user._id)}>Delete</Button>
-      
+      <Button variant="outlined" onClick={() => deleteUser(user._id)}>Delete</Button>
+      </div>
     </Container>
   );
 };

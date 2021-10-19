@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container } from "@material-ui/core";
+import { Container } from "@mui/material";
 import axios from "axios";
 import UserComp from "./User";
 import { useDispatch, useSelector } from "react-redux";

@@ -1,4 +1,4 @@
-import { Container, Button } from "@material-ui/core";
+import { Card, Button, List, Avatar, Stack, Typography } from "@mui/material";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -24,20 +24,19 @@ const MovieComp = ({ movie }) => {
         sub.movies.some((m) => m._id === movie._id)
       );
 
-      // 
+      //
       membersWatched = await Promise.all(
         membersWatched.map(async (x) => {
-          console.log(membersWatched)
+          console.log(membersWatched);
           let i = x.movies.findIndex((item) => item._id === movie._id);
           let memberName = await axios.get(
             "http://localhost:4000/api/members/" + x.memberId
           );
-            return {
-              memberId: x.memberId,
-              name: memberName.data ? memberName.data.name : "Name Not Exists",
-              date: x.movies[i].date,
-            };
-          
+          return {
+            memberId: x.memberId,
+            name: memberName.data ? memberName.data.name : "Name Not Exists",
+            date: x.movies[i].date,
+          };
         })
       );
       setMembersWatched(membersWatched);
@@ -47,34 +46,46 @@ const MovieComp = ({ movie }) => {
   }, [movie._id]);
 
   return (
-    <Container style={{ border: "1px solid black", width: "400px" }}>
+    <Card
+      sx={{ maxWidth: 345 }}
+      style={{ padding: "20px", border:"1px solid grey",}}
+    >
       <h3>
         {movie.name}, {movie.premiered}
       </h3>
-      <div>Genres: {movie.genres}</div>
+      <Typography>Genres: {movie.genres.join(', ')}</Typography><br/>
       <img src={movie.image} alt={movie.name} />
-      <div style={{ border: "1px solid black" }}>
+      <div style={{ padding: "20px" }}>
         <h4>Subscriptions Watched</h4>
         <ul>
           {membersWatched.map((member) => (
-            <li key={member.memberId}>
-              <a href={"/main/subscriptions/member_page/" + member.memberId}>
-                {member.name ? member.name : "Not Found"}
-              </a>
-              , {member.date}
-            </li>
+            <List key={member.memberId}>
+              <Stack direction='row' spacing={2}>
+                <Avatar
+                  sx={{ width: 14, height: 14 }}
+                  alt={member.name}
+                  // src={__dirname + '\public\member_avatar.png'}
+                />
+                <a href={"/main/subscriptions/member_page/" + member.memberId}>
+                  {member.name ? member.name : "Not Found"}
+                </a>
+                , {member.date}
+              </Stack>
+            </List>
           ))}
         </ul>
       </div>
       <br />
-      <Button variant='outlined'>
-        <Link to={path + `/edit_movie/${movie._id}`}>Edit</Link>
-      </Button>
-      <Button variant='outlined' onClick={() => deleteMovie(movie._id)}>
-        Delete
-      </Button>
+      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+        <Button variant='contained' style={{ width:"100px"}}>
+          <Link class="edit" to={path + `/edit_movie/${movie._id}`}>Edit</Link>
+        </Button>
+        <Button variant='outlined' onClick={() => deleteMovie(movie._id)}>
+          Delete
+        </Button>
+      </div>
       <br />
-    </Container>
+    </Card>
   );
 };
 

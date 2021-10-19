@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Button } from "@material-ui/core";
+import { Box, Button, TextField } from "@mui/material";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -16,7 +16,7 @@ const AddMemberComp = () => {
   const addmember = async () => {
     try {
       let resp = await axios.post("http://localhost:4000/api/members", member);
-      dispatch({ type: "ADD_member", payload: {id: resp._id, ...member} });
+      dispatch({ type: "ADD_member", payload: { id: resp._id, ...member } });
       history.push("/main/subscriptions");
     } catch (err) {
       console.log("Unable to Add Member", err);
@@ -24,32 +24,68 @@ const AddMemberComp = () => {
   };
 
   return (
-    <Container>
+    <Box
+      component='form'
+      sx={{
+        "& .MuiTextField-root": { m: 1 },
+      }}
+      noValidate
+      autoComplete='off'
+      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto" }}
+    >
       <h2>Add member</h2>
-      <form>
-        Name:{" "}
-        <input
-          type='text'
+        <TextField
+          label='Name:'
+          required
+          fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+          style={{ marginBottom: "20px" }}
           onChange={(e) => setMember({ ...member, name: e.target.value })}
         />
         <br />
-        Email:{" "}
-        <input
-          type='text'
+        <TextField
+          label='Email:'
+          required
+          fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+          style={{ marginBottom: "20px" }}
           onChange={(e) => setMember({ ...member, email: e.target.value })}
         />
         <br />
-        City:{" "}
-        <input
-          type='text'
+        <TextField
+          label='City:'
+          required
+          fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+          style={{ marginBottom: "20px" }}
           onChange={(e) => setMember({ ...member, city: e.target.value })}
         />
         <br />
-       
-        <Button onClick={addmember}>Add</Button>
-        <Button onClick={() => history.push("/main/subscriptions")}>Cancel</Button>
-      </form>
-    </Container>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            marginBottom: "20px",
+            marginTop: "20px",
+          }}
+        >
+          <Button variant='contained' onClick={addmember}>
+            Add
+          </Button>
+          <Button
+            variant='contained'
+            onClick={() => history.push("/main/subscriptions")}
+          >
+            Cancel
+          </Button>
+        </div>
+    </Box>
   );
 };
 

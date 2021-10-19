@@ -1,25 +1,28 @@
-import "../App.css";
 import { Link, useRouteMatch, Switch, Route } from "react-router-dom";
 import AddMovieComp from "../components/movies/AddMovie";
 import AllMoviesComp from "../components/movies/AllMovies";
-import { Button } from "@material-ui/core";
+import { Button, Container, Stack } from "@mui/material";
 import EditMovieComp from "../components/movies/EditMovie";
 import MoviePageComp from "./MoviePage";
 
 function MoviesComp() {
   const { path } = useRouteMatch();
-  console.log(path);
+
   return (
-    <>
-      <div className='App'>
-        <Button variant='contained'>
+    <Container fixed style={{justifyContent: "center"}}>
+      <Stack
+        style={{ justifyContent: "center", margin: "20px 40px" }}
+        direction={{ xs: "column", sm: "row" }}
+        spacing={2}
+      >
+        <Button variant='outlined'>
           <Link to={path}>All Movies</Link>
         </Button>
-
-        <Button variant='contained'>
+        <Button variant='outlined'>
           <Link to={path + "/add_movie"}>Add Movie</Link>
         </Button>
-      </div>
+      </Stack>
+
       <Switch>
         <Route exact path={path}>
           <AllMoviesComp />
@@ -34,7 +37,7 @@ function MoviesComp() {
           <MoviePageComp />
         </Route>
       </Switch>
-    </>
+    </Container>
   );
 }
 

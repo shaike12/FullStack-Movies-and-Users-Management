@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  Button,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  TextField,
+} from "@mui/material";
 
-const AddWatchedMovieComp = ({addNewMovie, watchedMovies }) => {
+const AddWatchedMovieComp = ({ addNewMovie, watchedMovies }) => {
   const [unwatchedMovies, setUnwatchedMovies] = useState([]);
   const [movieIdField, setMovieIdField] = useState("");
   const [dateField, setDateField] = useState(
     new Date().toISOString().substring(0, 10)
   );
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,25 +39,31 @@ const AddWatchedMovieComp = ({addNewMovie, watchedMovies }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={addNew}>
-        <h4>Add a New Movie</h4>
-        <select onChange={(e) => setMovieIdField(e.target.value)}>
-          {unwatchedMovies.map((movie) => (
-            <option key={movie._id} value={movie._id}>
+   
+      <FormControl sx={{ m: 2, minWidth: 80}} >
+        <InputLabel size='small'>Movie</InputLabel>
+        <Select
+        autoWidth
+        size='small'
+          onChange={(e) => setMovieIdField(e.target.value)}
+        >
+          {unwatchedMovies.reverse().map((movie) => (
+            <MenuItem key={movie._id} value={movie._id}>
               {movie.name}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-        <input
+        </Select>
+        <TextField
+          size='small'
           type='date'
           value={dateField}
           onChange={(e) => setDateField(e.target.value)}
+          style={{marginTop: "20px"}}
         />
-        <br />
-        <input type='submit' value='Subscribe' />
-      </form>
-    </div>
+        <br/>
+        <Button variant="contained" size='small' style={{width:"110px"}} onClick={addNew}>Subscribe</Button>
+      </FormControl>
+   
   );
 };
 

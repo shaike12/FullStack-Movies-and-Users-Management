@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField } from "@material-ui/core";
+import { TextField } from "@mui/material";
 
 const SearchMovieField = ({setSearch, search}) => {
 
@@ -7,7 +7,7 @@ const SearchMovieField = ({setSearch, search}) => {
     <div>
       <br />
       <TextField
-        variant='standard'
+      type="search"
         value={search}
         style={{ marginBottom: "20px" }}
         onChange={(e) => setSearch(e.target.value)}
