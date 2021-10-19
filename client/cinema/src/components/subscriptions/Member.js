@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Divider, ListItem } from "@mui/material";
+import { Card, Button, ListItem } from "@mui/material";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -101,7 +101,7 @@ const MemberComp = ({ member }) => {
 
       {/* Show All Watched Movies */}
       <h3>Movies Watched</h3>
-      <ul>
+      <ul style={{ overflow: "auto", width: "100%", maxHeight: "250px" }}>
         {watchedMovies.map((movie) => (
           <ListItem disablePadding key={movie._id}>
             <ListItem>
@@ -111,7 +111,6 @@ const MemberComp = ({ member }) => {
             </ListItem>
 
             <ListItem>{movie.date}</ListItem>
-            <Divider />
           </ListItem>
         ))}
       </ul>

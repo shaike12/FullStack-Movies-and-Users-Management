@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Button,
   TextField,
-  ButtonGroup,
   Box,
   Checkbox,
   FormGroup,
@@ -34,22 +33,24 @@ const AddUserComp = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  
+
   const addUser = async () => {
     try {
-      let permis = user.permissions
+      let permissions = user.permissions
         .filter((x) => x.isChecked)
         .map((x) => x.value);
 
       let resp = await axios.post("http://localhost:4000/api/users", {
         ...user,
-        permissions: permis,
+        permissions,
       });
       dispatch({
         type: "ADD_USER",
         payload: {
           id: resp._id,
           ...user,
-          permissions: permis,
+          permissions,
           created_date: new Date().toISOString().substring(0, 10),
         },
       });
@@ -105,8 +106,6 @@ const AddUserComp = () => {
       sx={{
         "& .MuiTextField-root": { m: 1 },
       }}
-      noValidate
-      autoComplete='off'
       style={{ textAlign: "center", maxWidth: "600px", margin:"0 auto" }}
     >
       <FormGroup>
@@ -119,7 +118,6 @@ const AddUserComp = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginBottom: "20px" }}
           onChange={(e) => setUser({ ...user, first_name: e.target.value })}
         />
         <TextField
@@ -130,7 +128,6 @@ const AddUserComp = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginBottom: "20px" }}
           onChange={(e) => setUser({ ...user, last_name: e.target.value })}
         />
         <TextField
@@ -141,7 +138,6 @@ const AddUserComp = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginBottom: "20px" }}
           onChange={(e) => setUser({ ...user, username: e.target.value })}
         />
         <TextField
@@ -152,7 +148,6 @@ const AddUserComp = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginBottom: "20px" }}
           onChange={(e) =>
             setUser({ ...user, session_timeout: e.target.value })
           }

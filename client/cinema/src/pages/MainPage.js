@@ -4,16 +4,23 @@ import MoviesComp from "./Movies";
 import MembersComp from "./Members";
 import UsersManagementComp from "./UsersManagement";
 import { Button, Stack, Container } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
-
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 
 function MainPageComp() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const logout = () => {
+    dispatch({ type: "LOGOUT" });
+    history.push("/login");
+  };
+
   return (
-    <Container style={{textAlign:"center", padding: "10px"}}>
+    <Container style={{ textAlign: "center", padding: "10px" }}>
       <h2>Movies - Subscriptions Web Site</h2>
       <Stack
-        style={{justifyContent: "center"}}
+        style={{ justifyContent: "center" }}
         direction={{ xs: "column", sm: "row" }}
         spacing={2}
       >
@@ -26,10 +33,11 @@ function MainPageComp() {
         <Button variant='outlined'>
           <Link to='/main/users_management'>Users Management</Link>
         </Button>
-        <Button  variant='contained'>Logout</Button>
+        <Button variant='contained' onClick={logout}>
+          Logout
+        </Button>
       </Stack>
 
-    
       <Switch>
         <Route path='/main/movies' component={MoviesComp} />
         <Route path='/main/subscriptions' component={MembersComp} />

@@ -48,12 +48,13 @@ const MovieComp = ({ movie }) => {
   return (
     <Card
       sx={{ maxWidth: 345 }}
-      style={{ padding: "20px", border:"1px solid grey",}}
+      style={{ padding: "20px", border: "1px solid grey" }}
     >
       <h3>
         {movie.name}, {movie.premiered}
       </h3>
-      <Typography>Genres: {movie.genres.join(', ')}</Typography><br/>
+      <Typography>Genres: {movie.genres.join(", ")}</Typography>
+      <br />
       <img src={movie.image} alt={movie.name} />
       <div style={{ padding: "20px" }}>
         <h4>Subscriptions Watched</h4>
@@ -77,8 +78,10 @@ const MovieComp = ({ movie }) => {
       </div>
       <br />
       <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-        <Button variant='contained' style={{ width:"100px"}}>
-          <Link class="edit" to={path + `/edit_movie/${movie._id}`}>Edit</Link>
+        <Button variant='contained' style={{ width: "100px" }}>
+          <Link className='edit' to={path + `/edit_movie/${movie._id}`}>
+            Edit
+          </Link>
         </Button>
         <Button variant='outlined' onClick={() => deleteMovie(movie._id)}>
           Delete

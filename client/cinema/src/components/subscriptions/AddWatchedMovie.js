@@ -18,52 +18,61 @@ const AddWatchedMovieComp = ({ addNewMovie, watchedMovies }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // Getting All Movies and Find The Ones That are Never Watched
       let resp = await axios.get("http://localhost:4000/api/movies");
-      let f = resp.data;
-      let moviesSelect = f.filter((movie) => {
-        if (watchedMovies.some((s) => s._id === movie._id)) {
-          return false;
-        }
-        return true;
-      });
-
-      setUnwatchedMovies(moviesSelect);
-      setMovieIdField(moviesSelect[0]._id);
+      let movies = resp.data;
+      let selectContent = movies.filter(
+        (movie) => !watchedMovies.some((s) => s._id === movie._id)
+      );
+      setUnwatchedMovies(selectContent);
+      //Set Default Value For Selcet Input
+      setMovieIdField(selectContent[0]._id);
     };
     fetchData();
   }, []);
 
+  // Add New Selected Movie To Watched
   const addNew = async (e) => {
     e.preventDefault();
     addNewMovie({ _id: movieIdField, date: dateField });
   };
 
   return (
-   
-      <FormControl sx={{ m: 2, minWidth: 80}} >
-        <InputLabel size='small'>Movie</InputLabel>
-        <Select
+    <FormControl sx={{ m: 2, minWidth: 80 }}>
+      <InputLabel size='small'>Choose a movie</InputLabel>
+      <Select
         autoWidth
         size='small'
-          onChange={(e) => setMovieIdField(e.target.value)}
-        >
-          {unwatchedMovies.reverse().map((movie) => (
-            <MenuItem key={movie._id} value={movie._id}>
-              {movie.name}
-            </MenuItem>
-          ))}
-        </Select>
-        <TextField
-          size='small'
-          type='date'
-          value={dateField}
-          onChange={(e) => setDateField(e.target.value)}
-          style={{marginTop: "20px"}}
-        />
-        <br/>
-        <Button variant="contained" size='small' style={{width:"110px"}} onClick={addNew}>Subscribe</Button>
-      </FormControl>
-   
+        label='Choose a movie'
+        value={movieIdField}
+        onChange={(e) => setMovieIdField(e.target.value)}
+      >
+        {unwatchedMovies.length === 0 && (
+          <MenuItem>All Movies Are Watched</MenuItem>
+        )}
+        {unwatchedMovies.map((movie) => (
+          <MenuItem key={movie._id} value={movie._id}>
+            {movie.name}
+          </MenuItem>
+        ))}
+      </Select>
+      <TextField
+        size='small'
+        type='date'
+        value={dateField}
+        onChange={(e) => setDateField(e.target.value)}
+        style={{ marginTop: "20px" }}
+      />
+      <br />
+      <Button
+        variant='contained'
+        size='small'
+        style={{ width: "110px" }}
+        onClick={addNew}
+      >
+        Subscribe
+      </Button>
+    </FormControl>
   );
 };
 

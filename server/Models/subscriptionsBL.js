@@ -38,7 +38,7 @@ const addSubscription = async (subscriptionData) => {
 
 const updateSubscription = async (memberID, subscriptionData) => {
   return new Promise((resolve, reject) => {
-
+    console.log(memberID, subscriptionData);
     subscriptionsModel.updateOne(
       {memberId: memberID},
       subscriptionData,

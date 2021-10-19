@@ -21,6 +21,7 @@ const updateSubscription = async (subscriptionID, subscription) => {
     subscriptionID,
     subscription
   );
+  console.log(resp);
   return resp.data;
 };
 

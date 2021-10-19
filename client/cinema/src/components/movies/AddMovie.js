@@ -13,12 +13,16 @@ const AddMovieComp = () => {
   });
   const dispatch = useDispatch();
   const history = useHistory();
-  const [error, setError] = useState('')
+  const [error, setError] = useState("");
 
   const addMovie = async () => {
-    if(movie.name === "" ||  movie.premiered === "" || movie.genres.length === 0) {
-      setError('Requierd All *')
-      return null
+    if (
+      movie.name === "" ||
+      movie.premiered === "" ||
+      movie.genres.length === 0
+    ) {
+      setError("Requierd All *");
+      return null;
     }
     try {
       let resp = await axios.post("http://localhost:4000/api/movies", movie);
@@ -37,20 +41,20 @@ const AddMovieComp = () => {
       }}
       noValidate
       autoComplete='off'
-      style={{ textAlign: "center", maxWidth: "600px", margin:"0 auto" }}
+      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto" }}
     >
       <h2>Add Movie</h2>
-      <span style={{color: 'red', float: 'left'}}>{error}</span>
+      <span style={{ color: "red", float: "left" }}>{error}</span>
       <TextField
-      required
-      fullWidth
+        required
+        fullWidth
         type='text'
         onChange={(e) => setMovie({ ...movie, name: e.target.value })}
         label='Name:'
       />
       <TextField
-      required
-      fullWidth
+        required
+        fullWidth
         type='text'
         onChange={(e) => setMovie({ ...movie, premiered: e.target.value })}
         label='Premiered:'
@@ -62,8 +66,8 @@ const AddMovieComp = () => {
         label='Image:'
       />
       <TextField
-      required
-      fullWidth
+        required
+        fullWidth
         type='text'
         onChange={(e) =>
           setMovie({ ...movie, genres: e.target.value.split(",") })

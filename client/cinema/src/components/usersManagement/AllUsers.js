@@ -24,11 +24,11 @@ const AllusersComp = () => {
           display: "flex",
           flexWrap: "wrap",
           gap: "30px",
-          justifyContent: "center",
+          justifyContent: "space-evenly",
         }}
       >
-        {users.map((user) => {
-          return <UserComp key={user._id} user={user} />;
+        {users.map((user, index) => {
+          return <UserComp key={index} user={user} />;
         })}
       </div>
     </Container>

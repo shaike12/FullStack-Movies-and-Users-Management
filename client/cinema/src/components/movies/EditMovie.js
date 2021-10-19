@@ -1,4 +1,3 @@
-
 import { Button, TextField, Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
@@ -31,69 +30,73 @@ const EditMovieComp = () => {
   };
 
   return (
-
-      <Box
-        component='form'
-        sx={{
-          "& .MuiTextField-root": { m: 2},
-        
+    <Box
+      component='form'
+      sx={{
+        "& .MuiTextField-root": { m: 2 },
+      }}
+      noValidate
+      autoComplete='off'
+      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto" }}
+    >
+      <h2>Edit Movie</h2>
+      <TextField
+        fullWidth
+        required
+        value={movie.name}
+        onChange={(e) => setMovie({ ...movie, name: e.target.value })}
+        InputLabelProps={{
+          shrink: movie.name ? true : false,
         }}
-        noValidate
-        autoComplete='off'
-        style={{textAlign: 'center',maxWidth:"600px"}}
-        >
-        <h2>Edit Movie</h2>
-        <TextField
-          type='text'
-          fullWidth
-          required
-          value={movie.name}
-          onChange={(e) => setMovie({ ...movie, name: e.target.value })}
-          InputLabelProps={{
-            shrink: movie.name ? true : false,
-          }}
-          label='Name:'
-        />
-        <TextField
-          type='text'
-          fullWidth
-          required
-          value={movie.premiered}
-          onChange={(e) => setMovie({ ...movie, premiered: e.target.value })}
-          InputLabelProps={{
-            shrink: movie.premiered ? true : false,
-          }}
-          label='Premiered:'
-        />
-        <TextField
-          type='text'
-          fullWidth
-          required
-          value={movie.image}
-          onChange={(e) => setMovie({ ...movie, image: e.target.value })}
-          InputLabelProps={{
-            shrink: movie.image ? true : false,
-          }}
-          label='Image:'
-        />
-        <TextField
-          type='text'
-          fullWidth
-          required
-          value={movie.genres}
-          onChange={(e) =>
-            setMovie({ ...movie, genres: e.target.value.split(",") })
-          }
-          InputLabelProps={{
-            shrink: movie.genres ? true : false,
-          }}
-          label='Genres:'
-        />
-        <div style={{display: 'flex', direction: 'row', justifyContent: 'space-evenly'}}>
-        <Button variant='contained' onClick={updateMovie}>Update</Button>
-        <Button variant='outlined' onClick={() => history.push("/main/movies")}>Cancel</Button>
-        </div>
-      </Box>
+        label='Name:'
+      />
+      <TextField
+        fullWidth
+        required
+        value={movie.premiered}
+        onChange={(e) => setMovie({ ...movie, premiered: e.target.value })}
+        InputLabelProps={{
+          shrink: movie.premiered ? true : false,
+        }}
+        label='Premiered:'
+      />
+      <TextField
+        fullWidth
+        required
+        value={movie.image}
+        onChange={(e) => setMovie({ ...movie, image: e.target.value })}
+        InputLabelProps={{
+          shrink: movie.image ? true : false,
+        }}
+        label='Image:'
+      />
+      <TextField
+        fullWidth
+        required
+        value={movie.genres}
+        onChange={(e) =>
+          setMovie({ ...movie, genres: e.target.value.split(",") })
+        }
+        InputLabelProps={{
+          shrink: movie.genres ? true : false,
+        }}
+        label='Genres:'
+      />
+      <div
+        style={{
+          display: "flex",
+          direction: "row",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <Button variant='contained' onClick={updateMovie}>
+          Update
+        </Button>
+        <Button variant='outlined' onClick={() => history.push("/main/movies")}>
+          Cancel
+        </Button>
+      </div>
+    </Box>
   );
 };
 

@@ -34,57 +34,57 @@ const AddMemberComp = () => {
       style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto" }}
     >
       <h2>Add member</h2>
-        <TextField
-          label='Name:'
-          required
-          fullWidth
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{ marginBottom: "20px" }}
-          onChange={(e) => setMember({ ...member, name: e.target.value })}
-        />
-        <br />
-        <TextField
-          label='Email:'
-          required
-          fullWidth
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{ marginBottom: "20px" }}
-          onChange={(e) => setMember({ ...member, email: e.target.value })}
-        />
-        <br />
-        <TextField
-          label='City:'
-          required
-          fullWidth
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{ marginBottom: "20px" }}
-          onChange={(e) => setMember({ ...member, city: e.target.value })}
-        />
-        <br />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-evenly",
-            marginBottom: "20px",
-            marginTop: "20px",
-          }}
+      <TextField
+        label='Name:'
+        required
+        fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
+        style={{ marginBottom: "20px" }}
+        onChange={(e) => setMember({ ...member, name: e.target.value })}
+      />
+      <br />
+      <TextField
+        label='Email:'
+        required
+        fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
+        style={{ marginBottom: "20px" }}
+        onChange={(e) => setMember({ ...member, email: e.target.value })}
+      />
+      <br />
+      <TextField
+        label='City:'
+        required
+        fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
+        style={{ marginBottom: "20px" }}
+        onChange={(e) => setMember({ ...member, city: e.target.value })}
+      />
+      <br />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          marginBottom: "20px",
+          marginTop: "20px",
+        }}
+      >
+        <Button variant='contained' onClick={addmember}>
+          Add
+        </Button>
+        <Button
+          variant='contained'
+          onClick={() => history.push("/main/subscriptions")}
         >
-          <Button variant='contained' onClick={addmember}>
-            Add
-          </Button>
-          <Button
-            variant='contained'
-            onClick={() => history.push("/main/subscriptions")}
-          >
-            Cancel
-          </Button>
-        </div>
+          Cancel
+        </Button>
+      </div>
     </Box>
   );
 };
