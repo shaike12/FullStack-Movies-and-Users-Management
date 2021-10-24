@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Container, Button, TextField, Box } from "@mui/material";
+import { Button, TextField, Box } from "@mui/material";
 import { useHistory } from "react-router";
-import { useDispatch } from "react-redux";
 import axios from "axios";
 
 const AddMovieComp = () => {
@@ -11,7 +10,6 @@ const AddMovieComp = () => {
     image: "",
     genres: [],
   });
-  const dispatch = useDispatch();
   const history = useHistory();
   const [error, setError] = useState("");
 
@@ -24,10 +22,24 @@ const AddMovieComp = () => {
       setError("Requierd All *");
       return null;
     }
+    const fetchParams = {
+      headers: {
+        "x-access-token": localStorage.getItem("authUser"),
+      },
+    };
     try {
-      let resp = await axios.post("http://localhost:4000/api/movies", movie);
-      dispatch({ type: "ADD_MOVIE", payload: { _id: resp, ...movie } });
-      history.push("/main/movies");
+      let resp = await axios.post(
+        "http://localhost:4000/api/movies",
+        movie,
+        fetchParams
+      );
+      if (resp.auth) {
+        console.log("your are not the login user");
+      } else {
+        // let id = resp.data
+        // dispatch({ type: "ADD_MOVIE", payload: { _id: id, ...movie } });
+        history.push("/main/movies");
+      }
     } catch (err) {
       console.log("Unable to Add Movie", err);
     }

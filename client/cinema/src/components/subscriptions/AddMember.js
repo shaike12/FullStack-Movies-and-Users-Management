@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import { useHistory } from "react-router";
-import { useDispatch } from "react-redux";
 import axios from "axios";
 
 const AddMemberComp = () => {
@@ -10,14 +9,25 @@ const AddMemberComp = () => {
     email: "",
     city: "",
   });
-  const dispatch = useDispatch();
   const history = useHistory();
 
   const addmember = async () => {
+    const fetchParams = {
+      headers: {
+        "x-access-token": localStorage.getItem("authUser"),
+      },
+    };
     try {
-      let resp = await axios.post("http://localhost:4000/api/members", member);
-      dispatch({ type: "ADD_member", payload: { id: resp._id, ...member } });
-      history.push("/main/subscriptions");
+      let resp = await axios.post(
+        "http://localhost:4000/api/members",
+        member,
+        fetchParams
+      );
+      if (resp.auth) {
+        console.log("your are not the login user");
+      } else {
+        history.push("/main/subscriptions");
+      }
     } catch (err) {
       console.log("Unable to Add Member", err);
     }

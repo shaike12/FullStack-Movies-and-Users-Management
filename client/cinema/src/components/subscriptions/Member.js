@@ -12,53 +12,92 @@ const MemberComp = ({ member }) => {
   const [isShow, setIsShow] = useState(false);
 
   const deleteMember = async (memberID) => {
-    await axios.delete("http://localhost:4000/api/members/" + memberID);
-    dispatch({ type: "DELETE_MEMBER", payload: memberID });
+    const fetchParams = {
+      headers: {
+        "x-access-token": localStorage.getItem("authUser"),
+      },
+    };
+    try {
+      await axios.delete(
+        "http://localhost:4000/api/members/" + memberID,
+        fetchParams
+      );
+      dispatch({ type: "DELETE_MEMBER", payload: memberID });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const addNewMovie = async (newMovie) => {
-    let resp = await axios.get(
-      `http://localhost:4000/api/subscriptions/${member._id}`
-    );
-    let sub = resp.data;
-    if (sub.length === 0) {
-      let obj = {
-        memberId: member._id,
-        movies: [newMovie],
-      };
-      await axios.post("http://localhost:4000/api/subscriptions", obj);
-    } else {
-      sub[0].movies.push(newMovie);
-      delete sub[0]._id;
-      await axios.put(
+    const fetchParams = {
+      headers: {
+        "x-access-token": localStorage.getItem("authUser"),
+      },
+    };
+    try {
+      let resp = await axios.get(
         `http://localhost:4000/api/subscriptions/${member._id}`,
-        sub[0]
+        fetchParams
       );
+      let sub = resp.data;
+      if (sub.length === 0) {
+        let obj = {
+          memberId: member._id,
+          movies: [newMovie],
+        };
+        await axios.post(
+          "http://localhost:4000/api/subscriptions",
+          obj,
+          fetchParams
+        );
+      } else {
+        sub[0].movies.push(newMovie);
+        delete sub[0]._id;
+        await axios.put(
+          `http://localhost:4000/api/subscriptions/${member._id}`,
+          sub[0],
+          fetchParams
+        );
+      }
+
+      setIsShow(false);
+    } catch (err) {
+      console.log(err);
     }
-    setIsShow(false);
   };
 
   useEffect(() => {
+    const fetchParams = {
+      headers: {
+        "x-access-token": localStorage.getItem("authUser"),
+      },
+    };
     const fetchData = async () => {
       let resp = await axios.get(
-        `http://localhost:4000/api/subscriptions/${member._id}`
+        `http://localhost:4000/api/subscriptions/${member._id}`,
+        fetchParams
       );
 
-      if (resp.data.length > 0) {
-        let data = await Promise.all(
-          resp.data[0].movies.map(async (movie) => {
-            let movieData = await axios.get(
-              `http://localhost:4000/api/movies/${movie._id}`
-            );
+      if (resp.auth) {
+        console.log("your are not the login user");
+      } else {
+        if (resp.data.length > 0) {
+          let data = await Promise.all(
+            resp.data[0].movies.map(async (movie) => {
+              let movieData = await axios.get(
+                `http://localhost:4000/api/movies/${movie._id}`,
+                fetchParams
+              );
 
-            if (movieData.data) {
-              movie.name = movieData.data.name;
-            }
+              if (movieData.data) {
+                movie.name = movieData.data.name;
+              }
 
-            return movie;
-          })
-        );
-        setWatchedMovies(data);
+              return movie;
+            })
+          );
+          setWatchedMovies(data);
+        }
       }
     };
     fetchData();
@@ -104,13 +143,15 @@ const MemberComp = ({ member }) => {
       <ul style={{ overflow: "auto", width: "100%", maxHeight: "250px" }}>
         {watchedMovies.map((movie) => (
           <ListItem disablePadding key={movie._id}>
-            <ListItem>
-              <a href={"/main/movies/movie_page/" + movie._id}>
-                {movie.name ? movie.name : "Not Found"}
-              </a>
-            </ListItem>
+            <a href={"/main/movies/movie_page/" + movie._id}>
+              {movie.name ? movie.name : "Not Found"}
+            </a>
 
-            <ListItem>{movie.date}</ListItem>
+            <div
+              style={{ width: "100px", textAlign: "right", fontWeight: "bold" }}
+            >
+              {movie.date}
+            </div>
           </ListItem>
         ))}
       </ul>

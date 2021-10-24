@@ -8,11 +8,19 @@ const UserComp = ({ user }) => {
   const dispatch = useDispatch();
 
   const deleteUser = async (userID) => {
-    // Disable Delete Admin
+    const fetchParams = {
+      headers: {
+        "x-access-token": localStorage.getItem("authUser"),
+      },
+    };
+    // Disable The Option To Delete Admin
     if (user.username === "admin") {
       return null;
     }
-    await axios.delete("http://localhost:4000/api/users/" + userID);
+    await axios.delete(
+      "http://localhost:4000/api/users/" + userID,
+      fetchParams
+    );
     dispatch({ type: "DELETE_USER", payload: userID });
   };
 
@@ -24,7 +32,12 @@ const UserComp = ({ user }) => {
       <p>Username : {user.username}</p>
       <p>Session Timeout : {user.session_timeout}</p>
       <p>Created Date : {user.created_date}</p>
-      <p>Permissions : <br/>{user.permissions.length !== 0 ? user.permissions.join(', ') : "Member Doesn't Permissions"}</p>
+      <p>
+        Permissions : <br />
+        {user.permissions.length !== 0
+          ? user.permissions.join(", ")
+          : "Member Doesn't Permissions"}
+      </p>
 
       <br />
       <div

@@ -1,7 +1,7 @@
 import {
   Button,
   TextField,
-  ButtonGroup,
+  CircularProgress,
   Box,
   Checkbox,
   FormGroup,
@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import axios from "axios";
 
@@ -34,26 +33,51 @@ const EditUserComp = () => {
     permissions: [],
   });
   const { id } = useParams();
-  const dispatch = useDispatch();
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
+    const fetchParams = {
+      headers: {
+        "x-access-token": localStorage.getItem("authUser"),
+      },
+    };
     // Add 'isChecked' Key To User Data
     async function fetchData() {
-      let user = await axios.get("http://localhost:4000/api/users/" + id);
-      let permis = initilizePermissions.map((x) => {
-        if (user.data.permissions.some((p) => p === x.value)) {
-          x.isChecked = true;
-          return x;
+      try {
+        let resp = await axios.get(
+          "http://localhost:4000/api/users/" + id,
+          fetchParams
+        );
+        if (resp.auth) {
+          console.log("your are not the login user");
+        } else {
+          let userData = resp.data;
+          let permis = initilizePermissions.map((x) => {
+            if (userData.permissions.some((p) => p === x.value)) {
+              x.isChecked = true;
+              return x;
+            }
+            return x;
+          });
+          setUser({ ...userData, permissions: permis });
         }
-        return x;
-      });
-      setUser({ ...user.data, permissions: permis });
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchData();
   }, [id]);
 
   const updateUser = async () => {
+    const fetchParams = {
+      headers: {
+        "x-access-token": localStorage.getItem("authUser"),
+      },
+    };
     // Clean Up 'isChecked' Key (Boolian) From User Data
     let obj = user;
     obj.permissions = obj.permissions
@@ -61,12 +85,13 @@ const EditUserComp = () => {
       .map((p) => p.value);
 
     try {
-      await axios.put("http://localhost:4000/api/users/" + id, obj);
-      dispatch({ type: "UPDATE_USER", payload: obj });
+      await axios.put("http://localhost:4000/api/users/" + id, obj, fetchParams);
       history.push("/main/users_management");
+      
     } catch (err) {
       console.log("Unable to Add User", err);
     }
+    
   };
 
   // Handle CheckBox Inputs
@@ -109,6 +134,7 @@ const EditUserComp = () => {
     setUser({ ...user, permissions: [...newPermissions] });
   };
 
+
   return (
     <Box
       component='form'
@@ -119,96 +145,102 @@ const EditUserComp = () => {
       autoComplete='off'
       style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto" }}
     >
-      <FormGroup>
-        <h2>Edit User</h2>
-        <TextField
-          label='First Name:'
-          value={user.first_name}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{ marginBottom: "20px" }}
-          fullWidth
-          onChange={(e) => setUser({ ...user, first_name: e.target.value })}
-        />
-        <TextField
-          label='Last Name:'
-          value={user.last_name}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{ marginBottom: "20px" }}
-          fullWidth
-          onChange={(e) => setUser({ ...user, last_name: e.target.value })}
-        />
-        <TextField
-          label='Username:'
-          value={user.username}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{ marginBottom: "20px" }}
-          fullWidth
-          onChange={(e) => setUser({ ...user, username: e.target.value })}
-        />
-        <TextField
-          label='Session Timeout:'
-          value={user.session_timeout}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{ marginBottom: "20px" }}
-          fullWidth
-          onChange={(e) =>
-            setUser({ ...user, session_timeout: e.target.value })
-          }
-        />
-        <TextField
-          label='Created Date:'
-          value={user.created_date}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{ marginBottom: "20px" }}
-          fullWidth
-          disabled
-        />
-        <h3>Permissions:</h3>
-        {user.permissions.map((permission, index) => {
-          return (
-            <FormControlLabel
-              key={index}
-              control={
-                <Checkbox
-                  name={permission.value}
-                  onChange={() => handleCheckChildElement(index)}
-                />
-              }
-              label={permission.value}
-              checked={permission.isChecked}
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <div>
+          <FormGroup>
+            <h2>Edit User</h2>
+            <TextField
+              label='First Name:'
+              value={user.first_name}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{ marginBottom: "20px" }}
+              fullWidth
+              onChange={(e) => setUser({ ...user, first_name: e.target.value })}
             />
-          );
-        })}
-      </FormGroup>
+            <TextField
+              label='Last Name:'
+              value={user.last_name}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{ marginBottom: "20px" }}
+              fullWidth
+              onChange={(e) => setUser({ ...user, last_name: e.target.value })}
+            />
+            <TextField
+              label='Username:'
+              value={user.username}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{ marginBottom: "20px" }}
+              fullWidth
+              onChange={(e) => setUser({ ...user, username: e.target.value })}
+            />
+            <TextField
+              label='Session Timeout:'
+              value={user.session_timeout}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{ marginBottom: "20px" }}
+              fullWidth
+              onChange={(e) =>
+                setUser({ ...user, session_timeout: e.target.value })
+              }
+            />
+            <TextField
+              label='Created Date:'
+              value={user.created_date}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{ marginBottom: "20px" }}
+              fullWidth
+              disabled
+            />
+            <h3>Permissions:</h3>
+            {user.permissions.map((permission, index) => {
+              return (
+                <FormControlLabel
+                  key={index}
+                  control={
+                    <Checkbox
+                      name={permission.value}
+                      onChange={() => handleCheckChildElement(index)}
+                    />
+                  }
+                  label={permission.value}
+                  checked={permission.isChecked}
+                />
+              );
+            })}
+          </FormGroup>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          marginBottom: "20px",
-          marginTop: "20px",
-        }}
-      >
-        <Button variant='contained' onClick={updateUser}>
-          Add
-        </Button>
-        <Button
-          variant='contained'
-          onClick={() => history.push("/main/users_management")}
-        >
-          Cancel
-        </Button>
-      </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              marginBottom: "20px",
+              marginTop: "20px",
+            }}
+          >
+            <Button variant='contained' onClick={updateUser}>
+              Save
+            </Button>
+            <Button
+              variant='contained'
+              onClick={() => history.push("/main/users_management")}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      )}
     </Box>
   );
 };

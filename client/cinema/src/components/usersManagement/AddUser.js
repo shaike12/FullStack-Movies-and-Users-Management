@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Button,
   TextField,
@@ -8,7 +8,6 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { useHistory } from "react-router";
-import { useDispatch } from "react-redux";
 import axios from "axios";
 
 const initilizePermissions = [
@@ -23,6 +22,7 @@ const initilizePermissions = [
 ];
 
 const AddUserComp = () => {
+  const history = useHistory();
   const [user, setUser] = useState({
     first_name: "",
     last_name: "",
@@ -30,30 +30,22 @@ const AddUserComp = () => {
     session_timeout: "",
     permissions: initilizePermissions,
   });
-  const dispatch = useDispatch();
-  const history = useHistory();
-
-  
 
   const addUser = async () => {
+    const fetchParams = {
+        headers: {
+          "x-access-token": localStorage.getItem("authUser"),
+        },
+      };
     try {
       let permissions = user.permissions
         .filter((x) => x.isChecked)
         .map((x) => x.value);
 
-      let resp = await axios.post("http://localhost:4000/api/users", {
+      await axios.post("http://localhost:4000/api/users", {
         ...user,
         permissions,
-      });
-      dispatch({
-        type: "ADD_USER",
-        payload: {
-          id: resp._id,
-          ...user,
-          permissions,
-          created_date: new Date().toISOString().substring(0, 10),
-        },
-      });
+      }, fetchParams);
       history.push("/main/users_management");
     } catch (err) {
       console.log("Unable to Add User", err);
@@ -106,7 +98,7 @@ const AddUserComp = () => {
       sx={{
         "& .MuiTextField-root": { m: 1 },
       }}
-      style={{ textAlign: "center", maxWidth: "600px", margin:"0 auto" }}
+      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto" }}
     >
       <FormGroup>
         <h2>Add User</h2>

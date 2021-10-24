@@ -19,14 +19,29 @@ const AddWatchedMovieComp = ({ addNewMovie, watchedMovies }) => {
   useEffect(() => {
     const fetchData = async () => {
       // Getting All Movies and Find The Ones That are Never Watched
-      let resp = await axios.get("http://localhost:4000/api/movies");
-      let movies = resp.data;
-      let selectContent = movies.filter(
-        (movie) => !watchedMovies.some((s) => s._id === movie._id)
-      );
-      setUnwatchedMovies(selectContent);
-      //Set Default Value For Selcet Input
-      setMovieIdField(selectContent[0]._id);
+      let fetchParams = {
+        headers: { "x-access-token": localStorage.getItem("authUser") },
+      };
+      try {
+        let resp = await axios.get(
+          "http://localhost:4000/api/movies",
+          fetchParams
+        );
+
+        if (resp.auth) {
+          console.log("your are not the login user");
+        } else {
+          let allMovies = resp.data;
+          let selectContent = allMovies.filter(
+            (movie) => !watchedMovies.some((s) => s._id === movie._id)
+          );
+          setUnwatchedMovies(selectContent);
+          //Set Default Value For Selcet Input
+          setMovieIdField(selectContent[0]._id);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     };
     fetchData();
   }, []);

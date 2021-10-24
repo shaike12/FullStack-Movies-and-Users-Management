@@ -1,5 +1,5 @@
 import { Card, Button, List, Avatar, Stack, Typography } from "@mui/material";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ const MovieComp = ({ movie }) => {
   const { path } = useRouteMatch();
   const dispatch = useDispatch();
   const [membersWatched, setMembersWatched] = useState([]);
+  const history = useHistory();
 
   const deleteMovie = async (movieID) => {
     await axios.delete("http://localhost:4000/api/movies/" + movieID);
@@ -16,34 +17,57 @@ const MovieComp = ({ movie }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let resp = await axios.get("http://localhost:4000/api/subscriptions/");
-      let allsubscriptions = resp.data;
+      let fetchParams = {
+        headers: { "x-access-token": localStorage.getItem("authUser") },
+      };
 
-      // Find Members That are Watched This Movie
-      let membersWatched = allsubscriptions.filter((sub) =>
-        sub.movies.some((m) => m._id === movie._id)
-      );
-
-      //
-      membersWatched = await Promise.all(
-        membersWatched.map(async (x) => {
-          console.log(membersWatched);
-          let i = x.movies.findIndex((item) => item._id === movie._id);
-          let memberName = await axios.get(
-            "http://localhost:4000/api/members/" + x.memberId
+      try {
+        let resp = await axios.get(
+          "http://localhost:4000/api/subscriptions/",
+          fetchParams
+        );
+        let allSubscriptions = resp.data;
+        if (allSubscriptions.auth) {
+          console.log("your are not the login user");
+        } else {
+          // Find Members That are Watched This Movie
+          let membersWatchedMovie = allSubscriptions.filter((sub) =>
+          sub.movies.some((m) => m._id === movie._id)
           );
-          return {
-            memberId: x.memberId,
-            name: memberName.data ? memberName.data.name : "Name Not Exists",
-            date: x.movies[i].date,
-          };
-        })
-      );
-      setMembersWatched(membersWatched);
+          
+          try {
+            let membersWatchedMovie2 = await Promise.all(
+              membersWatchedMovie.map(async (x) => {
+                let i = x.movies.findIndex((item) => item._id === movie._id);
+                let memberName = await axios.get(
+                  "http://localhost:4000/api/members/" + x.memberId,
+                  fetchParams
+                  );
+
+                  if (memberName) {
+                  return {
+                    memberId: x.memberId,
+                    name: memberName.data.name
+                    ? memberName.data.name
+                    : "Name Not Exists",
+                    date: x.movies[i].date,
+                  };
+                }
+              })
+            );
+            
+            setMembersWatched(membersWatchedMovie2);
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     fetchData();
-  }, [movie._id]);
+  }, []);
 
   return (
     <Card

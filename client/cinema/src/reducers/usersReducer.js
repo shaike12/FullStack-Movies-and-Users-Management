@@ -9,6 +9,7 @@ const users = (state = [], action) => {
     case "UPDATE_USER":
       return state.map((user) => {
         if (user._id === action.payload.id) {
+          console.log(action.payload)
           return action.payload.user;
         }
         return user;

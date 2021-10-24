@@ -5,3 +5,7 @@ a {
 .edit {
   color: white;
 }
+
+.logout_button {
+  background-color: red;
+}

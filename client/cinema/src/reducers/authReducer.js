@@ -4,10 +4,10 @@ const auth = (state = {}, action) => {
       return action.payload
 
     case "LOGOUT":
-      return {}
-      
+      return null
+
     default:
-      return state;
+      return null;
   }
 };
 

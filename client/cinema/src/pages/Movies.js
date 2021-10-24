@@ -7,7 +7,7 @@ import MoviePageComp from "./MoviePage";
 
 function MoviesComp() {
   const { path } = useRouteMatch();
-
+  
   return (
     <Container fixed style={{justifyContent: "center"}}>
       <Stack
