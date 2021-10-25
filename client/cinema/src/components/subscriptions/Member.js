@@ -10,11 +10,12 @@ const MemberComp = ({ member }) => {
   const dispatch = useDispatch();
   const [watchedMovies, setWatchedMovies] = useState([]);
   const [isShow, setIsShow] = useState(false);
+  const [permissions, setPermissions] = useState([]);
 
   const deleteMember = async (memberID) => {
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     try {
@@ -31,7 +32,7 @@ const MemberComp = ({ member }) => {
   const addNewMovie = async (newMovie) => {
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     try {
@@ -67,20 +68,25 @@ const MemberComp = ({ member }) => {
   };
 
   useEffect(() => {
-    const fetchParams = {
-      headers: {
-        "x-access-token": localStorage.getItem("authUser"),
-      },
-    };
     const fetchData = async () => {
+      const fetchParams = {
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
+        },
+      };
       let resp = await axios.get(
         `http://localhost:4000/api/subscriptions/${member._id}`,
         fetchParams
       );
 
+      // If User Not Authorized 
       if (resp.auth) {
         console.log("your are not the login user");
       } else {
+        // If User Is Authorized
+        setPermissions(
+          JSON.parse(localStorage.getItem("authUser")).user.permissions
+        );
         if (resp.data.length > 0) {
           let data = await Promise.all(
             resp.data[0].movies.map(async (movie) => {
@@ -117,12 +123,16 @@ const MemberComp = ({ member }) => {
             marginBottom: "20px",
           }}
         >
-          <Button variant='outlined'>
-            <Link to={path + `/edit_member/${member._id}`}>Edit</Link>
-          </Button>
-          <Button variant='outlined' onClick={() => deleteMember(member._id)}>
-            Delete
-          </Button>
+          {permissions.some((x) => x === "Update Subscriptions") && (
+            <Button variant='outlined'>
+              <Link to={path + `/edit_member/${member._id}`}>Edit</Link>
+            </Button>
+          )}
+          {permissions.some((x) => x === "Delete Subscriptions") && (
+            <Button variant='outlined' onClick={() => deleteMember(member._id)}>
+              Delete
+            </Button>
+          )}
         </div>
       </div>
 
@@ -143,7 +153,7 @@ const MemberComp = ({ member }) => {
       <ul style={{ overflow: "auto", width: "100%", maxHeight: "250px" }}>
         {watchedMovies.map((movie) => (
           <ListItem disablePadding key={movie._id}>
-            <a href={"/main/movies/movie_page/" + movie._id}>
+            <a href={"/main/movie_page/" + movie._id}>
               {movie.name ? movie.name : "Not Found"}
             </a>
 

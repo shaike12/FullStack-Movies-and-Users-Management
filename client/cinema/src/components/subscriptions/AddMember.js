@@ -14,7 +14,7 @@ const AddMemberComp = () => {
   const addmember = async () => {
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     try {

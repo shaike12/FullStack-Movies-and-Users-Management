@@ -11,10 +11,13 @@ router.post("/login", async (req, res) => {
   let user = users.find((user) => user.username === username);
 
   if (user) {
+    if (user.password !== password) {
+      res.json({ auth: false, message: "Password is Incorrect" });
+    }
     let token = jwt.sign({ id: user._id }, "mySecret", { expiresIn: 7200 });
-    res.json({ auth: true, token: token });
+    res.json({ auth: true, token: token, user: user });
   } else {
-    res.sendStatus(401)
+    res.json({ auth: false, message: "Username is Incorrect" });
   }
 });
 

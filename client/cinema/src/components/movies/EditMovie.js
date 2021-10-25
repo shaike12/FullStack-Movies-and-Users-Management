@@ -14,7 +14,7 @@ const EditMovieComp = () => {
     setIsLoading(true);
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     async function fetchData() {
@@ -41,7 +41,7 @@ const EditMovieComp = () => {
   const updateMovie = async () => {
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     try {

@@ -34,7 +34,7 @@ const AddUserComp = () => {
   const addUser = async () => {
     const fetchParams = {
         headers: {
-          "x-access-token": localStorage.getItem("authUser"),
+          "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
         },
       };
     try {
@@ -77,7 +77,7 @@ const AddUserComp = () => {
       currentCheckBox.value === "View Subscriptions" &&
       !currentCheckBox.isChecked
     ) {
-      console.log(newPermissions);
+
       newPermissions[1].isChecked = false;
       newPermissions[2].isChecked = false;
       newPermissions[3].isChecked = false;

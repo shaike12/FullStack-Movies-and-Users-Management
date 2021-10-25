@@ -50,7 +50,6 @@ const addMember = async (memberData) => {
 
 const updateMember = async (memberID, memberData) => {
   return new Promise((resolve, reject) => {
-    console.log(memberData);
     membersModel.findByIdAndUpdate(memberID, memberData, (err, data) => {
       if (err) {
         reject(err);

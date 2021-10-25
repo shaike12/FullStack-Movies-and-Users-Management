@@ -15,7 +15,12 @@ function SignUpComp() {
 
   const signup = async () => {
     setError("");
-    let resp = await axios.get("http://localhost:4000/api/users");
+    const fetchParams = {
+      headers: {
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).user.token,
+      },
+    };
+    let resp = await axios.get("http://localhost:4000/api/users", fetchParams);
     let allUsers = resp.data;
     let user = allUsers.find((user) => user.username === username);
 
@@ -27,13 +32,19 @@ function SignUpComp() {
       // First Time Signup
       if (!user.password) {
         if (password === confirmPassword) {
-          await axios.put(`http://localhost:4000/api/users/${user._id}`, {
-            ...user,
-            password: password,
-          });
-          localStorage.setItem("authUser", user);
-          dispatch({ type: "LOGIN", payload: user });
-          history.push("/main");
+          try {
+
+            await axios.put(`http://localhost:4000/api/users/${user._id}`, {
+              ...user,
+              password: password,
+            }, fetchParams);
+            localStorage.setItem("authUser", user);
+            dispatch({ type: "LOGIN", payload: user });
+            history.push("/main");
+          }
+          catch (err) {
+            console.log(err)
+          }
         }
         else{
           setError("Confirm Password Not Match")
@@ -53,12 +64,12 @@ function SignUpComp() {
       sx={{
         "& .MuiTextField-root": { m: 1, width: "95%" },
         margin: "0 auto",
-        maxWidth: "400px",
+        maxWidth: "600px",
         textAlign: "center",
         padding: 10,
       }}
     >
-      <FormGroup sx={{ border: 1, padding: 4, marginBottom: 2, minWidth: 350 }}>
+      <FormGroup sx={{ border: 1, padding: 4, marginBottom: 2, minWidth: 300, minHeight: 300, justifyItems: "center"}}>
         <h2>SignUp</h2>
         <TextField
           label='Username:'

@@ -12,7 +12,7 @@ const EditMemberComp = () => {
   useEffect(() => {
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     async function fetchData() {
@@ -32,7 +32,7 @@ const EditMemberComp = () => {
   const updateMember = async () => {
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     try {

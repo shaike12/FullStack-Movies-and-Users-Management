@@ -40,7 +40,7 @@ const EditUserComp = () => {
     setIsLoading(true);
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     // Add 'isChecked' Key To User Data
@@ -75,7 +75,7 @@ const EditUserComp = () => {
   const updateUser = async () => {
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     // Clean Up 'isChecked' Key (Boolian) From User Data
@@ -119,7 +119,7 @@ const EditUserComp = () => {
       currentCheckBox.value === "View Subscriptions" &&
       !currentCheckBox.isChecked
     ) {
-      console.log(newPermissions);
+
       newPermissions[1].isChecked = false;
       newPermissions[2].isChecked = false;
       newPermissions[3].isChecked = false;

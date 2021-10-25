@@ -10,7 +10,7 @@ const UserComp = ({ user }) => {
   const deleteUser = async (userID) => {
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     // Disable The Option To Delete Admin

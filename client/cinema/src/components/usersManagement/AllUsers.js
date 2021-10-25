@@ -13,7 +13,7 @@ const AllusersComp = () => {
     setIsLoading(true);
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     let fetchData = async () => {

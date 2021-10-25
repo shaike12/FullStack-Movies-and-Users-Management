@@ -16,15 +16,16 @@ function LoginComp() {
 
   const login = async () => {
     setError("");
-    let resp = await axios.post("http://localhost:4000/api/auth/login", {username: username});
+    let resp = await axios.post("http://localhost:4000/api/auth/login", {username, password});
+    console.log(resp)
     let token = resp.data.token;
 
     if (token) {
-      localStorage.setItem("authUser", token);
-      dispatch({ type: "LOGIN", payload: token });
+      localStorage.setItem("authUser", JSON.stringify({user: resp.data.user, token: token}));
+      dispatch({ type: "LOGIN", payload: resp.data.user });
       history.push("/main");
     } else {
-      setError("Username/Password is Incorrect");
+      setError(resp.data.message);
     }
   };
 
@@ -32,14 +33,14 @@ function LoginComp() {
     <Box
       component='form'
       sx={{
-        "& .MuiTextField-root": { m: 1, width: "95%" },
+        "& .MuiTextField-root": { m: 1, width: "95%"},
         margin: "0 auto",
-        maxWidth: "400px",
+        maxWidth: "600px",
         textAlign: "center",
         padding: 10,
       }}
     >
-      <FormGroup sx={{ border: 1, padding: 4, marginBottom: 2, minWidth: 350 }}>
+      <FormGroup sx={{ border: 1, padding: 4, marginBottom: 2, minWidth: 300, minHeight: 300, justifyItems: "center"}}>
         <h2>Login</h2>
         <TextField
           label='Username:'

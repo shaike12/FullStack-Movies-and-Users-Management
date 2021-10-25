@@ -1,5 +1,5 @@
 import { Card, Button, List, Avatar, Stack, Typography } from "@mui/material";
-import { Link, useRouteMatch, useHistory } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -8,7 +8,8 @@ const MovieComp = ({ movie }) => {
   const { path } = useRouteMatch();
   const dispatch = useDispatch();
   const [membersWatched, setMembersWatched] = useState([]);
-  const history = useHistory();
+  const [editPersmission, setEditPermission] = useState(false);
+  const [deletePersmission, setDeletePermission] = useState(false);
 
   const deleteMovie = async (movieID) => {
     await axios.delete("http://localhost:4000/api/movies/" + movieID);
@@ -18,7 +19,9 @@ const MovieComp = ({ movie }) => {
   useEffect(() => {
     const fetchData = async () => {
       let fetchParams = {
-        headers: { "x-access-token": localStorage.getItem("authUser") },
+        headers: {
+          "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
+        },
       };
 
       try {
@@ -26,15 +29,25 @@ const MovieComp = ({ movie }) => {
           "http://localhost:4000/api/subscriptions/",
           fetchParams
         );
-        let allSubscriptions = resp.data;
-        if (allSubscriptions.auth) {
+        if (resp.auth) {
           console.log("your are not the login user");
         } else {
-          // Find Members That are Watched This Movie
-          let membersWatchedMovie = allSubscriptions.filter((sub) =>
-          sub.movies.some((m) => m._id === movie._id)
+          setEditPermission(
+            JSON.parse(localStorage.getItem("authUser")).user.permissions.some(
+              (x) => x === "Update Movies"
+            )
           );
-          
+          setDeletePermission(
+            JSON.parse(localStorage.getItem("authUser")).user.permissions.some(
+              (x) => x === "Delete Movies"
+            )
+          );
+          // Find Members That are Watched This Movie
+          let allSubscriptions = resp.data;
+          let membersWatchedMovie = allSubscriptions.filter((sub) =>
+            sub.movies.some((m) => m._id === movie._id)
+          );
+
           try {
             let membersWatchedMovie2 = await Promise.all(
               membersWatchedMovie.map(async (x) => {
@@ -42,20 +55,20 @@ const MovieComp = ({ movie }) => {
                 let memberName = await axios.get(
                   "http://localhost:4000/api/members/" + x.memberId,
                   fetchParams
-                  );
+                );
 
-                  if (memberName) {
+                if (memberName) {
                   return {
                     memberId: x.memberId,
                     name: memberName.data.name
-                    ? memberName.data.name
-                    : "Name Not Exists",
+                      ? memberName.data.name
+                      : "Name Not Exists",
                     date: x.movies[i].date,
                   };
                 }
               })
             );
-            
+
             setMembersWatched(membersWatchedMovie2);
           } catch (err) {
             console.log(err);
@@ -91,7 +104,7 @@ const MovieComp = ({ movie }) => {
                   alt={member.name}
                   // src={__dirname + '\public\member_avatar.png'}
                 />
-                <a href={"/main/subscriptions/member_page/" + member.memberId}>
+                <a href={"/main/member_page/" + member.memberId}>
                   {member.name ? member.name : "Not Found"}
                 </a>
                 , {member.date}
@@ -102,14 +115,18 @@ const MovieComp = ({ movie }) => {
       </div>
       <br />
       <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-        <Button variant='contained' style={{ width: "100px" }}>
-          <Link className='edit' to={path + `/edit_movie/${movie._id}`}>
-            Edit
-          </Link>
-        </Button>
-        <Button variant='outlined' onClick={() => deleteMovie(movie._id)}>
-          Delete
-        </Button>
+        {editPersmission && (
+          <Button variant='contained' style={{ width: "100px" }}>
+            <Link className='edit' to={path + `/edit_movie/${movie._id}`}>
+              Edit
+            </Link>
+          </Button>
+        )}
+        {deletePersmission && (
+          <Button variant='outlined' onClick={() => deleteMovie(movie._id)}>
+            Delete
+          </Button>
+        )}
       </div>
       <br />
     </Card>

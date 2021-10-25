@@ -5,9 +5,25 @@ import AllMembersComp from "../components/subscriptions/AllMembers";
 import EditMemberComp from "../components/subscriptions/EditMember";
 import AddMemberComp from "../components/subscriptions/AddMember";
 import MemberPageComp from "../pages/MemberPage";
+import { useEffect, useState } from "react";
 
 function MembersComp() {
   const { path } = useRouteMatch();
+  const [createPersmission, setCreatePermission] = useState(false);
+  const [editPersmission, setEditPermission] = useState(false);
+
+  useEffect(() => {
+    setCreatePermission(
+      JSON.parse(localStorage.getItem("authUser")).user.permissions.some(
+        (x) => x === "Create Subscriptions"
+      )
+    );
+    setEditPermission(
+      JSON.parse(localStorage.getItem("authUser")).user.permissions.some(
+        (x) => x === "Update Subscriptions"
+      )
+    );
+  }, []);
 
   return (
     <div className='App'>
@@ -23,23 +39,21 @@ function MembersComp() {
           <Link to={path + "/add_member"}>Add Member</Link>
         </Button>
       </Stack>
-  
 
-    
       <Switch>
         <Route exact path={path}>
           <AllMembersComp />
         </Route>
-        <Route path={path + "/add_member"}>
-          <AddMemberComp />
-        </Route>
-        <Route path={path + "/edit_member/:id"}>
-          <EditMemberComp/>
-        </Route>
-        <Route path={path + "/member_page/:id"}>
-          <MemberPageComp />
-        </Route>
-      
+        {createPersmission && (
+          <Route path={path + "/add_member"}>
+            <AddMemberComp />
+          </Route>
+        )}
+        {editPersmission && (
+          <Route path={path + "/edit_member/:id"}>
+            <EditMemberComp />
+          </Route>
+        )}
       </Switch>
     </div>
   );

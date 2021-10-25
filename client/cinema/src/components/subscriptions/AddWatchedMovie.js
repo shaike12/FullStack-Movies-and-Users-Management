@@ -20,7 +20,7 @@ const AddWatchedMovieComp = ({ addNewMovie, watchedMovies }) => {
     const fetchData = async () => {
       // Getting All Movies and Find The Ones That are Never Watched
       let fetchParams = {
-        headers: { "x-access-token": localStorage.getItem("authUser") },
+        headers: { "x-access-token": JSON.parse(localStorage.getItem("authUser")).token },
       };
       try {
         let resp = await axios.get(

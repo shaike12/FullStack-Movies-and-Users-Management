@@ -24,7 +24,7 @@ const AddMovieComp = () => {
     }
     const fetchParams = {
       headers: {
-        "x-access-token": localStorage.getItem("authUser"),
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
       },
     };
     try {
@@ -36,8 +36,7 @@ const AddMovieComp = () => {
       if (resp.auth) {
         console.log("your are not the login user");
       } else {
-        // let id = resp.data
-        // dispatch({ type: "ADD_MOVIE", payload: { _id: id, ...movie } });
+
         history.push("/main/movies");
       }
     } catch (err) {

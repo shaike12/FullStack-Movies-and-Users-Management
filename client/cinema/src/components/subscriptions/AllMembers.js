@@ -8,24 +8,33 @@ const AllMembersComp = () => {
   const dispatch = useDispatch();
   const members = useSelector((state) => state.members);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasPermission, setHasPermission] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
-
+    console.log(localStorage.getItem("authUser"));
     let fetchData = async () => {
       const fetchParams = {
         headers: {
-          "x-access-token": localStorage.getItem("authUser"),
+          "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
         },
       };
 
       try {
-        let resp = await axios.get("http://localhost:4000/api/members", fetchParams);
-        let allMembers = resp.data;
+        let resp = await axios.get(
+          "http://localhost:4000/api/members",
+          fetchParams
+        );
 
-        if (allMembers.auth) {
+        if (resp.auth) {
           console.log("your are not the login user");
         } else {
+          let allMembers = resp.data;
+          setHasPermission(
+            JSON.parse(localStorage.getItem("authUser")).user.permissions.some(
+              (x) => x === "View Subscriptions"
+            )
+          );
           dispatch({ type: "ADD_ALL_MEMBERS", payload: allMembers });
         }
       } catch (err) {
@@ -37,6 +46,7 @@ const AllMembersComp = () => {
     fetchData();
   }, []);
 
+  console.log(JSON.parse(localStorage.getItem("authUser")))
   return (
     <Container>
       <h2>Members</h2>
@@ -51,9 +61,10 @@ const AllMembersComp = () => {
             justifyContent: "center",
           }}
         >
-          {members.map((member) => {
-            return <MemberComp key={member._id} member={member} />;
-          })}
+          {hasPermission &&
+            members.map((member) => {
+              return <MemberComp key={member._id} member={member} />;
+            })}
         </div>
       )}
     </Container>
