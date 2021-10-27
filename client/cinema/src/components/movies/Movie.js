@@ -12,8 +12,22 @@ const MovieComp = ({ movie }) => {
   const [deletePersmission, setDeletePermission] = useState(false);
 
   const deleteMovie = async (movieID) => {
-    await axios.delete("http://localhost:4000/api/movies/" + movieID);
-    dispatch({ type: "DELETE_MOVIE", payload: movieID });
+    let fetchParams = {
+      headers: {
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
+      },
+    };
+
+    try {
+      await axios.delete(
+        "http://localhost:4000/api/movies/" + movieID,
+        fetchParams
+      );
+
+      dispatch({ type: "DELETE_MOVIE", payload: movieID });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {

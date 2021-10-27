@@ -4,9 +4,9 @@ import MoviesComp from "./Movies";
 import MembersComp from "./Members";
 import UsersManagementComp from "./UsersManagement";
 import { Button, Stack, Container } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MoviePageComp from "./MoviePage";
 import MemberPageComp from "./MemberPage";
 
@@ -15,6 +15,7 @@ const MINUTES = 1000 * 60;
 function MainPageComp() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const [name, setName] = useState("");
 
   const logout = () => {
     dispatch({ type: "LOGOUT" });
@@ -36,7 +37,7 @@ function MainPageComp() {
           history.push("/login");
         }, time);
       }
-      // dispatch({ type: "LOGIN", payload: localStorage["authUser"] });
+      setName(JSON.parse(localStorage["authUser"]).user.first_name);
     }
   }, []);
 
@@ -44,14 +45,16 @@ function MainPageComp() {
     <Container style={{ textAlign: "center", padding: "10px" }}>
       {localStorage["authUser"] && (
         <>
-          <Button
-            sx={{ backgroundColor: "red" }}
-            variant='contained'
-            onClick={logout}
-          >
-            Logout
-          </Button>
-
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h2>Hello, {name && name.charAt(0).toUpperCase() + name.slice(1)}</h2>
+            <Button
+              sx={{ backgroundColor: "red" }}
+              variant='contained'
+              onClick={logout}
+            >
+              Logout
+            </Button>
+          </div>
           <h2>Movies - Subscriptions Web Site</h2>
           <Stack
             style={{ justifyContent: "center" }}

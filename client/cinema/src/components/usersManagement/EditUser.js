@@ -18,9 +18,9 @@ const initilizePermissions = [
   { value: "Delete Subscriptions", isChecked: false },
   { value: "Update Subscriptions", isChecked: false },
   { value: "View Movies", isChecked: false },
+  { value: "Create Movies", isChecked: false },
   { value: "Delete Movies", isChecked: false },
   { value: "Update Movies", isChecked: false },
-  { value: "Create Movies", isChecked: false },
 ];
 
 const EditUserComp = () => {
@@ -85,13 +85,15 @@ const EditUserComp = () => {
       .map((p) => p.value);
 
     try {
-      await axios.put("http://localhost:4000/api/users/" + id, obj, fetchParams);
+      await axios.put(
+        "http://localhost:4000/api/users/" + id,
+        obj,
+        fetchParams
+      );
       history.push("/main/users_management");
-      
     } catch (err) {
       console.log("Unable to Add User", err);
     }
-    
   };
 
   // Handle CheckBox Inputs
@@ -119,7 +121,6 @@ const EditUserComp = () => {
       currentCheckBox.value === "View Subscriptions" &&
       !currentCheckBox.isChecked
     ) {
-
       newPermissions[1].isChecked = false;
       newPermissions[2].isChecked = false;
       newPermissions[3].isChecked = false;
@@ -133,7 +134,6 @@ const EditUserComp = () => {
 
     setUser({ ...user, permissions: [...newPermissions] });
   };
-
 
   return (
     <Box

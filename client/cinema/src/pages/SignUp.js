@@ -15,43 +15,42 @@ function SignUpComp() {
 
   const signup = async () => {
     setError("");
-    const fetchParams = {
-      headers: {
-        "x-access-token": JSON.parse(localStorage.getItem("authUser")).user.token,
-      },
-    };
-    let resp = await axios.get("http://localhost:4000/api/users", fetchParams);
-    let allUsers = resp.data;
-    let user = allUsers.find((user) => user.username === username);
 
     if (username === "" || password === "" || confirmPassword === "") {
       setError("Need To Fill All Fields");
       return null;
     }
+    if (password !== confirmPassword) {
+      setError("Passwords Not Matched");
+      return null;
+    }
+    let resp = await axios.post("http://localhost:4000/api/auth/signup", {
+      username,
+    });
+    !resp.data.auth && setError(resp.data.message);
+    let user = resp.data.user;
+
     if (user) {
       // First Time Signup
-      if (!user.password) {
-        if (password === confirmPassword) {
-          try {
-
-            await axios.put(`http://localhost:4000/api/users/${user._id}`, {
-              ...user,
-              password: password,
-            }, fetchParams);
-            localStorage.setItem("authUser", user);
-            dispatch({ type: "LOGIN", payload: user });
-            history.push("/main");
-          }
-          catch (err) {
-            console.log(err)
-          }
-        }
-        else{
-          setError("Confirm Password Not Match")
-        }
-      } else {
-        setError("This Username Already Signed Up");
-        
+      const fetchParams = {
+        headers: {
+          "x-access-token": resp.data.token,
+        },
+      };
+      try {
+        await axios.put(
+          `http://localhost:4000/api/users/${user._id}`,
+          {
+            ...user,
+            password: password,
+          },
+          fetchParams
+        );
+        localStorage.setItem("authUser", JSON.stringify(resp.data));
+        dispatch({ type: "LOGIN", payload: resp.data });
+        history.push("/main");
+      } catch (err) {
+        console.log(err);
       }
     } else {
       setError("Username Not Exists");
@@ -69,7 +68,16 @@ function SignUpComp() {
         padding: 10,
       }}
     >
-      <FormGroup sx={{ border: 1, padding: 4, marginBottom: 2, minWidth: 300, minHeight: 300, justifyItems: "center"}}>
+      <FormGroup
+        sx={{
+          border: 1,
+          padding: 4,
+          marginBottom: 2,
+          minWidth: 300,
+          minHeight: 300,
+          justifyItems: "center",
+        }}
+      >
         <h2>SignUp</h2>
         <TextField
           label='Username:'

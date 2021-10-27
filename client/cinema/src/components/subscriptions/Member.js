@@ -139,7 +139,7 @@ const MemberComp = ({ member }) => {
       <Button variant='contained' onClick={() => setIsShow(!isShow)}>
         Subscribe New Movie
       </Button>
-      {/* Show Add New Watched Movie  */}
+      {/* Add New Watched Movie  */}
       {isShow && (
         <AddWatchedMovieComp
           id={member._id}

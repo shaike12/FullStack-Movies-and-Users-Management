@@ -14,11 +14,10 @@ function App() {
 
   useEffect(() => {
     if (localStorage["authUser"]) {
-          // let resp = await axios.post("http://localhost:4000/api/auth/login", {username: username});
-
       dispatch({ type: "LOGIN", payload: localStorage["authUser"] });
+    } else {
+      history.push("/login");
     }
-    
   }, [auth]);
 
   return (

@@ -16,9 +16,9 @@ const initilizePermissions = [
   { value: "Delete Subscriptions", isChecked: false },
   { value: "Update Subscriptions", isChecked: false },
   { value: "View Movies", isChecked: false },
+  { value: "Create Movies", isChecked: false },
   { value: "Delete Movies", isChecked: false },
   { value: "Update Movies", isChecked: false },
-  { value: "Create Movies", isChecked: false },
 ];
 
 const AddUserComp = () => {
@@ -33,19 +33,23 @@ const AddUserComp = () => {
 
   const addUser = async () => {
     const fetchParams = {
-        headers: {
-          "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
-        },
-      };
+      headers: {
+        "x-access-token": JSON.parse(localStorage.getItem("authUser")).token,
+      },
+    };
     try {
       let permissions = user.permissions
         .filter((x) => x.isChecked)
         .map((x) => x.value);
 
-      await axios.post("http://localhost:4000/api/users", {
-        ...user,
-        permissions,
-      }, fetchParams);
+      await axios.post(
+        "http://localhost:4000/api/users",
+        {
+          ...user,
+          permissions,
+        },
+        fetchParams
+      );
       history.push("/main/users_management");
     } catch (err) {
       console.log("Unable to Add User", err);
@@ -77,7 +81,6 @@ const AddUserComp = () => {
       currentCheckBox.value === "View Subscriptions" &&
       !currentCheckBox.isChecked
     ) {
-
       newPermissions[1].isChecked = false;
       newPermissions[2].isChecked = false;
       newPermissions[3].isChecked = false;
