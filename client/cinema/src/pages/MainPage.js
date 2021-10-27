@@ -46,7 +46,7 @@ function MainPageComp() {
       {localStorage["authUser"] && (
         <>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h2>Hello, {name && name.charAt(0).toUpperCase() + name.slice(1)}</h2>
+            <h3>Hello, {name && name.charAt(0).toUpperCase() + name.slice(1)}</h3>
             <Button
               sx={{ backgroundColor: "red" }}
               variant='contained'

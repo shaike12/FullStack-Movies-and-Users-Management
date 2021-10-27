@@ -12,7 +12,6 @@ const AllMembersComp = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    console.log(localStorage.getItem("authUser"));
     let fetchData = async () => {
       const fetchParams = {
         headers: {
@@ -46,7 +45,6 @@ const AllMembersComp = () => {
     fetchData();
   }, []);
 
-  console.log(JSON.parse(localStorage.getItem("authUser")))
   return (
     <Container>
       <h2>Members</h2>

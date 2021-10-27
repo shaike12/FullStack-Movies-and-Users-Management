@@ -15,8 +15,6 @@ function App() {
   useEffect(() => {
     if (localStorage["authUser"]) {
       dispatch({ type: "LOGIN", payload: localStorage["authUser"] });
-    } else {
-      history.push("/login");
     }
   }, [auth]);
 

@@ -17,7 +17,7 @@ const getUsers = async () => {
           let userPermissions = json2.permissions.find(
             (permission) => item._id == permission._id
           );
-          console.log(json2);
+
           let userData = {
             ...user,
             ...item._doc,
